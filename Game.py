@@ -1,7 +1,9 @@
 from Jugador import Jugador
-from Enemigo import Goomba
+from Enemigo import Goomba, Turtle
 from Poderes import Hongo_rojo, Hongo_verde, Estrella
-from constants import ANCHO_VENTANA, ALTO_VENTANA, Y, FONDO
+from Crash import *
+from constants import ANCHO_VENTANA, ALTO_VENTANA, Y, SOUNDEFFECTS
+from debug import recuadros
 
 import pygame
 
@@ -18,15 +20,25 @@ class Game:
 #           CREAR LOS GRUPOS
         self.enemigos = pygame.sprite.Group()
         self.poderes = pygame.sprite.Group()
-
-        goomba = Goomba(f"Goomba", 300, Y) #Instanciar a los goombas
-        self.enemigos.add(goomba)
         
         self.jugador = Jugador("Mario Mosquera", 0, Y)
+
+        goomba = Goomba("Goomba", 300, Y) #Instanciar a los goombas
+        turtle = Turtle("Turtle", 1200, Y)
+        self.enemigos.add(goomba, turtle)
+
+        estrella = Estrella(900, Y)
+        hongo_verde = Hongo_verde(700, Y)
+        hongo_rojo = Hongo_rojo(500, Y)
+        self.poderes.add(hongo_rojo, hongo_verde) # se elimino la aparición de la estrella
 
     def update(self):
         self.jugador.update()
         self.enemigos.update()
+        self.poderes.update()
+
+        collide_jugador_poder(self.jugador, self.poderes)
+        collide_jugador_enemigo(self.jugador, self.enemigos)
 
 
     def handle_events(self):
@@ -35,16 +47,16 @@ class Game:
                 self.running = False
 
     def draw(self):
-        self.ventana.fill((0, 100, 200))
-        self.enemigos.draw(self.ventana)
+        self.ventana.fill((255, 255, 255))
         self.ventana.blit(self.jugador.image, self.jugador.rect)
+        self.enemigos.draw(self.ventana)
+        self.poderes.draw(self.ventana)
+
+#           DEPURAR
+        recuadros(self)
 
 #           SUELO
-        self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))
-
-#        pygame.draw.rect(self.ventana, (0,255,0), self.jugador.rect, 2) # REMARCAR LA CAJA DEL JUGADOR PARA COLISIONES
-#        for enemigo in self.enemigos:
-#            pygame.draw.rect(self.ventana, (255,0,0), enemigo.rect, 2) # REMARCAR LA CAJA DE LOS ENEMIGOS
+        """self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))"""
 
     def run(self):
         while self.running:
@@ -53,4 +65,3 @@ class Game:
             self.draw()
             pygame.display.flip()
             self.clock.tick(self.FPS)
-        

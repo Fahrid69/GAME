@@ -1,6 +1,4 @@
-from Game import Game
-
-import pygame
+from Game import Game, pygame
 
 if __name__ == "__main__":
     juego = Game()
