@@ -8,7 +8,7 @@ class Poder(pygame.sprite.Sprite):
         super().__init__()
         self.nombre = nombre
         self.image = image
-        self.rect = self.image.get_rect(bottomleft=(dx,Y))
+        self.rect = self.image.get_rect(bottomleft=(dx,dy))
         
 class Hongo_rojo(Poder):
     def __init__(self, dx, dy):
@@ -21,8 +21,6 @@ class Hongo_rojo(Poder):
     def update(self):
         self.animacion.actualizar()
         self.image = self.animacion.get_frame()
-
-
 
 class Hongo_verde(Poder):
     def __init__(self, dx, dy):
@@ -45,11 +43,10 @@ class Estrella(Poder):
         frames = [SPRITES_PODERES["estrella"]["1s"],SPRITES_PODERES["estrella"]["2s"],SPRITES_PODERES["estrella"]["3s"],SPRITES_PODERES["estrella"]["4s"],SPRITES_PODERES["estrella"]["5s"]]
         self.animacion = Animacion(frames, 12.5)
 
-#        
-
-        self.velocidad = 5
-        self.salto = 10
-        self.gravedad = 0.25
+#           atributos:
+        self.velocidad = 4
+        self.salto = 5
+        self.gravedad = 0.625
         self.direccion = -1
         self.suelo = Y
 

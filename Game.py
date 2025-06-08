@@ -10,7 +10,7 @@ import pygame
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("Mario from Temu")
+        pygame.display.set_caption("SMMG")
 
         self.ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
         self.clock = pygame.time.Clock() # ESTABLECE EL TIEMPO desde que se inicia el juego
@@ -23,14 +23,14 @@ class Game:
         
         self.jugador = Jugador("Mario Mosquera", 0, Y)
 
-        goomba = Goomba("Goomba", 300, Y) #Instanciar a los goombas
-        turtle = Turtle("Turtle", 1200, Y)
+        goomba = Goomba("Goomba", 900, Y) #Instanciar a los goombas
+        turtle = Turtle("Turtle", 200, Y)
         self.enemigos.add(goomba, turtle)
 
         estrella = Estrella(900, Y)
         hongo_verde = Hongo_verde(700, Y)
         hongo_rojo = Hongo_rojo(500, Y)
-        self.poderes.add(hongo_rojo, hongo_verde) # se elimino la aparición de la estrella
+        self.poderes.add(hongo_rojo, hongo_verde) # agg la estrella
 
     def update(self):
         self.jugador.update()
@@ -47,16 +47,17 @@ class Game:
                 self.running = False
 
     def draw(self):
-        self.ventana.fill((255, 255, 255))
+        self.ventana.fill((50, 175, 250))
         self.ventana.blit(self.jugador.image, self.jugador.rect)
         self.enemigos.draw(self.ventana)
         self.poderes.draw(self.ventana)
+        self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))
+
 
 #           DEPURAR
         recuadros(self)
 
 #           SUELO
-        """self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))"""
 
     def run(self):
         while self.running:

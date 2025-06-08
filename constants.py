@@ -7,10 +7,10 @@ ANCHO_VENTANA = 1380
 ALTO_VENTANA = 720
 
 # con esta modifica el suelo real del juego a los objetos
-Y = 400
+Y = 640                               #640
 
 ## IMGS
-FONDO = pygame.transform.scale(pygame.image.load("Assets/font/4.Ground.png"), (1200, 720))
+FONDO = pygame.transform.scale(pygame.image.load("Assets/font/front.png"), (ANCHO_VENTANA, 91))
 
 # DIRECTORIOS FIJOS
 D_JUGADOR = "Assets/player/"
@@ -24,12 +24,12 @@ E_JUGADOR = (60,60)
 # ALMACENAR LOS SPRITES:
 SPRITES_JUGADOR = {
     "mm1": {
-        "iddle": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/DERECHA.png"),E_JUGADOR),
-        "run1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_1.png"),E_JUGADOR),
-        "run2": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_2.png"),E_JUGADOR),
-        "run3": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_3.png"),E_JUGADOR),
-        "run4": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_4.png"),E_JUGADOR),
-        "jump1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/SALTAR_DERECHA.png"),E_JUGADOR)
+        "iddle": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/DERECHA.png"),(60,60)),
+        "run1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_1.png"),(60,60)),
+        "run2": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_2.png"),(60,60)),
+        "run3": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_3.png"),(60,60)),
+        "run4": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/CORRIENDO_DERECHA_4.png"),(60,60)),
+        "jump1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/SALTAR_DERECHA.png"),(60,60))
     },
     "mm2": {
         "iddle": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/DERECHA.png"),(60,80)),
@@ -88,6 +88,10 @@ SPRITES_PODERES = {
 
 SOUNDEFFECTS = {
     "salto": pygame.mixer.Sound("Assets/soundeffects/soundjump/jump.wav"),
+    "star": pygame.mixer.Sound("Assets/soundeffects/soundpower/star/game-bonus-2-294436.mp3"),
+    "daño": pygame.mixer.Sound("Assets/soundeffects/soundamage/385046__mortisblack__damage.ogg"),
+    "daño1": pygame.mixer.Sound("Assets/soundeffects/soundamage/753607__etheraudio__retro-hit-eight-bit.wav"),
+    "daño2": pygame.mixer.Sound("Assets/soundeffects/soundamage/406113__daleonfire__dead-8bit.wav"),
     "vida": pygame.mixer.Sound("Assets/soundeffects/soundpower/hv/518306__mrthenoronha__extra-life-8-bit.wav"),
     "gigante": pygame.mixer.Sound("Assets/soundeffects/soundpower/hr/647977__cloud-10__8-bit-coin-or-power-up-fx-for-retro-video-games.mp3")
 }

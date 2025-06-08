@@ -19,6 +19,7 @@ class Jugador(Personaje):
         self.direccion = "der"
         self.version = "mm1"
         self.sprites = SPRITES_JUGADOR
+        self.time = pygame.time.get_ticks()
         self.image = self.sprites[self.version]["iddle"]
         self.rect = self.image.get_rect(topleft=(dx, dy) )
 
@@ -88,9 +89,6 @@ class Jugador(Personaje):
             self.vel = 5
 
     def crecer(self):
-        if self.version == "mm2":
-            return
-        
         self.version = "mm2" # cambiar de personaje
 
         if self.direccion == "der":
@@ -98,12 +96,16 @@ class Jugador(Personaje):
         else:
             self.image = pygame.transform.flip(self.sprites[self.version]["iddle"], True, False)
 
-        self.vel = 6
-
         bottomleft = self.rect.bottomleft
         self.rect = self.image.get_rect(bottomleft = bottomleft)
 
         self.animacion = Animacion([self.sprites[self.version]["run1"], self.sprites[self.version]["run2"], self.sprites[self.version]["run3"], self.sprites[self.version]["run4"],], 7.5)
+
+    def inmunidad(self):
+        pass
+    
+    def fallecimiento(Self):
+        pass
   
     def actualizar_imgs(self, accion):
         key = f"{accion}"
