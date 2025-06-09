@@ -38,7 +38,8 @@ SPRITES_JUGADOR = {
         "run3": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/02_DERECHA_GRANDE.png"),(60,80)),
         "run4": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/03_DERECHA_GRANDE.png"),(60,80)),
         "jump1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/SALTAR_DERECHA_GRANDE.png"),(60,80))
-    }
+    },
+    "gameover": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/GAMEOVER.png"), (60,60))
 }
 
 SPRITES_GOOMBA = {
@@ -83,15 +84,23 @@ SPRITES_PODERES = {
         "3s": pygame.transform.scale(pygame.image.load(f"{D_PODERES}Estrella/30_starman.png"), (40,40)),
         "4s": pygame.transform.scale(pygame.image.load(f"{D_PODERES}Estrella/40_starman.png"), (40,40)),
         "5s": pygame.transform.scale(pygame.image.load(f"{D_PODERES}Estrella/50_starman.png"), (40,40))
+    },
+    "coin": {
+        "1c": pygame.transform.scale(pygame.image.load(f"Assets/powers/Moneda/10_coin.png"), (40, 40)),
+        "2c": pygame.transform.scale(pygame.image.load(f"Assets/powers/Moneda/20_coin.png"), (40, 40)),
+        "3c": pygame.transform.scale(pygame.image.load(f"Assets/powers/Moneda/30_coin.png"), (40, 40)),
+        "4c": pygame.transform.scale(pygame.image.load(f"Assets/powers/Moneda/40_coin.png"), (40, 40))
     }
 }
 
 SOUNDEFFECTS = {
     "salto": pygame.mixer.Sound("Assets/soundeffects/soundjump/jump.wav"),
-    "star": pygame.mixer.Sound("Assets/soundeffects/soundpower/star/game-bonus-2-294436.mp3"),
+    "star": pygame.mixer.Sound("Assets/soundeffects/soundpower/star/22-star-power-restored-101soundboards (mp3cut.net).wav"),
     "daño": pygame.mixer.Sound("Assets/soundeffects/soundamage/385046__mortisblack__damage.ogg"),
     "daño1": pygame.mixer.Sound("Assets/soundeffects/soundamage/753607__etheraudio__retro-hit-eight-bit.wav"),
-    "daño2": pygame.mixer.Sound("Assets/soundeffects/soundamage/406113__daleonfire__dead-8bit.wav"),
+    "daño2": pygame.mixer.Sound("Assets/soundeffects/soundamage/406113_daleonfire_dead-8bit (mp3cut.net).wav"),
+    "coin": pygame.mixer.Sound("Assets/soundeffects/soundcoins/242857__plasterbrain__coin-get - copia.wav"),
     "vida": pygame.mixer.Sound("Assets/soundeffects/soundpower/hv/518306__mrthenoronha__extra-life-8-bit.wav"),
-    "gigante": pygame.mixer.Sound("Assets/soundeffects/soundpower/hr/647977__cloud-10__8-bit-coin-or-power-up-fx-for-retro-video-games.mp3")
+    "gigante": pygame.mixer.Sound("Assets/soundeffects/soundpower/hr/647977__cloud-10__8-bit-coin-or-power-up-fx-for-retro-video-games.mp3"),
+    "GAMEOVER": pygame.mixer.Sound("Assets/soundeffects/soundtrack/game-over-deep-male-voice-clip-352695.mp3")
 }

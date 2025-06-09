@@ -1,5 +1,4 @@
 from constants import *
-from Enemigo import Enemigo
 
 import pygame, random
 
@@ -19,30 +18,37 @@ def collide_jugador_poder(jugador, poderes):
             SOUNDEFFECTS["vida"].play()
             poderes.remove(colision)
         elif colision.nombre == "Inmunidad":
-            #jugador.inmunidad()
+            jugador.inmunidad()
+            jugador.velocidad = 7
             SOUNDEFFECTS["star"].play()
             poderes.remove(colision)
-            pass
+        elif colision.nombre == "Moneda":
+            SOUNDEFFECTS["coin"].play()
+            poderes.remove(colision)
 
 def collide_jugador_enemigo(jugador, enemigos):
     colision = pygame.sprite.spritecollideany(jugador, enemigos)
     if colision:
-        for enemigo in enemigos:
-            if jugador.rect.colliderect(enemigo.rect):
-                if jugador.rect.bottom >= enemigo.rect.top + 10 and jugador.salto > 0:
-                    enemigo.fallecimiento(jugador)
-                elif jugador.version == "mm2":
-                    jugador.version = "mm1"
-                    SOUNDEFFECTS["daño2"].play()
-                else:
-                    jugador.vidas -= 1
-                    print(jugador.vidas)
-                    SOUNDEFFECTS["daño2"].play()
-                break
-        """
-        if jugador.rect.bottom >= enemigo.rect.bottom + 10 and jugador.salto > 0:
-            jugador.vidas -= 1
-            print(jugador.vidas)
-            #renacer()
-        elif colision.nombre == "Turtle":
-            jugador.vidas -= 1"""
+        if jugador.estado == "normal":
+            for enemigo in enemigos:
+                if jugador.rect.colliderect(enemigo.rect):
+                    if jugador.rect.bottom >= enemigo.rect.top + 10 and jugador.salto > 0:
+                        enemigo.death(jugador)
+                    elif jugador.versiones == "mm2":
+                        jugador.estado = "normal"
+                        jugador.versiones = "mm1"
+                        SOUNDEFFECTS["daño2"].play()
+                    else:
+                        jugador.death()
+                        if jugador.vidas > 0:
+                            SOUNDEFFECTS["daño2"].play()
+
+                            
+        elif jugador.estado == "inmunidad":
+            print("eliminando a los enemigos")
+            #enemigos.remove(colision)
+            pass
+                
+"""
+    Conseguir un tiempo de cooldown antes que MM vuelva a ser dañado por un enemigo
+    tiempo de cooldown = 2"""

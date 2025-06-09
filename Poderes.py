@@ -68,3 +68,17 @@ class Estrella(Poder):
         if self.rect.bottom >= self.suelo:
             self.rect.bottom = self.suelo
             self.salto =-10
+
+class Moneda(Poder):
+    def __init__(self, dx, dy):
+        imagen = SPRITES_PODERES["coin"]["1c"]
+        super().__init__("Moneda", imagen, dx, dy)
+
+        frames = [SPRITES_PODERES["coin"]["1c"], SPRITES_PODERES["coin"]["2c"], SPRITES_PODERES["coin"]["3c"], SPRITES_PODERES["coin"]["4c"]]
+        self.animacion = Animacion(frames, 9)
+
+    def update(self):
+#           ANIMACION:
+        self.animacion.actualizar()
+        self.image = self.animacion.get_frame()
+

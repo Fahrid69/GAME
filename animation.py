@@ -12,5 +12,4 @@ class Animacion:
             self.index = (self.index + 1) % len(self.frames)
     
     def get_frame(self):
-        self.frames[self.index]
-        return
+        return self.frames[self.index]

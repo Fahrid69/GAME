@@ -26,7 +26,7 @@ class Goomba(Enemigo):
 
         self.movimiento = -1.5
 
-    def fallecimiento(self, jugador):
+    def death(self, jugador):
         """Goomba al ser pisado desde arriba por MM, se cargara la imagen de muerte y MM rebotara sobre el. La imagen cargada de muerte de goomba, 
         debera desaparecer 1 segundo despues sumando 100 puntos a los puntos del jugador"""
         self.movimiento = 0
@@ -71,7 +71,7 @@ class Turtle(Enemigo):
         self.estado = "vivo"
         self.direccion = "izq"
 
-    def fallecimiento(self, jugador):
+    def death(self, jugador):
         self.falltime = pygame.time.get_ticks()
         self.estado = "muerto"
 

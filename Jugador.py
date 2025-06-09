@@ -10,45 +10,45 @@ class Jugador(Personaje):
         super().__init__(nombre, dx, dy)
         self.vidas = 3
         self.salto = 0
-        self.vel = 5    
         self.puntos = 0
         self.gravedad = 1
+        self.velocidad = 5    
         self.poder = False
-        self.estado = True
         self.ensuelo = True
+        self.estado = "normal"
         self.direccion = "der"
-        self.version = "mm1"
+        self.versiones = "mm1"
+        self.version = self.versiones
         self.sprites = SPRITES_JUGADOR
-        self.time = pygame.time.get_ticks()
-        self.image = self.sprites[self.version]["iddle"]
+        self.tstatus = 0
+        self.image = self.sprites[self.versiones]["iddle"]
         self.rect = self.image.get_rect(topleft=(dx, dy) )
 
-        self.animacion = Animacion([self.sprites[self.version]["run1"], self.sprites[self.version]["run2"],self.sprites[self.version]["run3"],self.sprites[self.version]["run4"]], 7.5)
+        self.animacion = Animacion([self.sprites[self.versiones]["run1"], self.sprites[self.versiones]["run2"],self.sprites[self.versiones]["run3"],self.sprites[self.versiones]["run4"]], 7.5)
 
     def update(self):
         keys = pygame.key.get_pressed()
         self.movimiento = False
 
-#          DETECTAR CONTROLES
+#          - DETECTAR CONTROLES -
         if (keys[pygame.K_SPACE] or keys[pygame.K_w]) and self.ensuelo:
             self.salto = -20
             self.ensuelo = False
             SOUNDEFFECTS["salto"].play()
         elif keys[pygame.K_d] and not keys[pygame.K_a]:
-            self.dx += self.vel
+            self.dx += self.velocidad
             self.direccion = "der"
             self.movimiento = True
-            #no salirse de la ventana
             if self.dx > ANCHO_VENTANA - self.rect.width:
                 self.dx = ANCHO_VENTANA - self.rect.width
         elif keys[pygame.K_a] and not keys[pygame.K_d]:
-            self.dx -= self.vel
+            self.dx -= self.velocidad
             self.direccion = "izq"
             self.movimiento = True
-            #no salirse d ela ventana
             if self.dx < 0:
                 self.dx = 0
 
+#           - SALTO - 
         if not self.ensuelo:
             self.salto +=self.gravedad
             self.dy += self.salto
@@ -59,9 +59,8 @@ class Jugador(Personaje):
             self.ensuelo = True
 
 #          ACTUALIZAR LA ANIMACION
-#
         if not self.ensuelo:
-            self.image = SPRITES_JUGADOR[self.version]["jump1"] 
+            self.image = SPRITES_JUGADOR[self.versiones]["jump1"] 
             if self.direccion == "izq":
                 self.image = pygame.transform.flip(self.image, True, False)
         elif self.movimiento:
@@ -74,40 +73,61 @@ class Jugador(Personaje):
         else:
             # Imagen estatica segun la dirección del personaje:
             if self.direccion == "der":
-                self.image = self.sprites[self.version]["iddle"]
+                self.image = self.sprites[self.versiones]["iddle"]
             elif self.direccion == "izq":
-                self.image = pygame.transform.flip(SPRITES_JUGADOR[self.version]["iddle"], True, False)
+                self.image = pygame.transform.flip(SPRITES_JUGADOR[self.versiones]["iddle"], True, False)
 
-        self.rect.bottomleft = (self.dx, self.dy)
+#           - OPORTUNIDAD DE VIDAS - 
+        if self.estado == "muerto":
+            if pygame.time.get_ticks() - self.tcooldown > 3000:
+                self.vidas -= 1
+                self.estado = "normal"
 
-#           LIMITAR ESPACIO
-        if self.dx <= 0 or self.dx >= ANCHO_VENTANA:
-            self.vel = 0
-            if self.direccion == "der":
-                self.vel = 5
-        else:
-            self.vel = 5
+#           - TIEMPO DE LA INMUNIDAD -
+        if self.estado == "inmunidad":
+            if pygame.time.get_ticks() - self.tstatus > 10000:
+                self.estado = "normal"
+                self.velocidad = 5
+
+#           - IDENTIFICAR LA VERSION -
+        if self.versiones != self.version:
+            self.animacion = Animacion([self.sprites[self.versiones]["run1"],self.sprites[self.versiones]["run2"],self.sprites[self.versiones]["run3"],self.sprites[self.versiones]["run4"]], 7.5)
+            self.version = self.versiones
+        
+        self.rect = self.image.get_rect(bottomleft=(self.dx, self.dy))
 
     def crecer(self):
-        self.version = "mm2" # cambiar de personaje
+        self.estado = "gigante"
+        self.versiones = "mm2" # cambiar de personaje
 
         if self.direccion == "der":
-            self.image = self.sprites[self.version]["iddle"] 
+            self.image = self.sprites[self.versiones]["iddle"] 
         else:
-            self.image = pygame.transform.flip(self.sprites[self.version]["iddle"], True, False)
+            self.image = pygame.transform.flip(self.sprites[self.versiones]["iddle"], True, False)
 
         bottomleft = self.rect.bottomleft
         self.rect = self.image.get_rect(bottomleft = bottomleft)
 
-        self.animacion = Animacion([self.sprites[self.version]["run1"], self.sprites[self.version]["run2"], self.sprites[self.version]["run3"], self.sprites[self.version]["run4"],], 7.5)
+        self.animacion = Animacion([self.sprites[self.versiones]["run1"], self.sprites[self.versiones]["run2"], self.sprites[self.versiones]["run3"], self.sprites[self.versiones]["run4"],], 7.5)
 
     def inmunidad(self):
-        pass
+        self.estado = "inmunidad"
+        self.tstatus = pygame.time.get_ticks()
     
-    def fallecimiento(Self):
-        pass
+    def death(self):
+        self.estado = "muerto"
+        self.tcooldown = pygame.time.get_ticks()
+        print("ASJMGKLASDMGNOASLKDMGÑ")
+
+        if self.vidas <= 0:
+            self.vidas = 0
+            print("GAME OVER")
+            SOUNDEFFECTS["GAMEOVER"].play()
+
+            self.image = SPRITES_JUGADOR["gameover"]
+            self.rect = self.image.get_rect(bottom=Y)
   
     def actualizar_imgs(self, accion):
         key = f"{accion}"
-        if key in self.sprites[self.version]:
-            self.image = self.sprites[self.version][key]
+        if key in self.sprites[self.versiones]:
+            self.image = self.sprites[self.versiones][key]

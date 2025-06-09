@@ -1,6 +1,6 @@
 from Jugador import Jugador
 from Enemigo import Goomba, Turtle
-from Poderes import Hongo_rojo, Hongo_verde, Estrella
+from Poderes import Hongo_rojo, Hongo_verde, Estrella, Moneda
 from Crash import *
 from constants import ANCHO_VENTANA, ALTO_VENTANA, Y, SOUNDEFFECTS
 from debug import recuadros
@@ -17,20 +17,23 @@ class Game:
         self.running = True
         self.FPS = 60
 
-#           CREAR LOS GRUPOS
+#           CREAR LOS GRUPOS:
         self.enemigos = pygame.sprite.Group()
         self.poderes = pygame.sprite.Group()
         
+#           INSTANCIAMIENTO:
         self.jugador = Jugador("Mario Mosquera", 0, Y)
 
         goomba = Goomba("Goomba", 900, Y) #Instanciar a los goombas
         turtle = Turtle("Turtle", 200, Y)
-        self.enemigos.add(goomba, turtle)
+        self.enemigos.add(turtle, goomba)
 
         estrella = Estrella(900, Y)
         hongo_verde = Hongo_verde(700, Y)
         hongo_rojo = Hongo_rojo(500, Y)
-        self.poderes.add(hongo_rojo, hongo_verde) # agg la estrella
+
+        moneda = Moneda(100, Y)
+        self.poderes.add(estrella, moneda) # agg la estrella
 
     def update(self):
         self.jugador.update()
@@ -39,6 +42,9 @@ class Game:
 
         collide_jugador_poder(self.jugador, self.poderes)
         collide_jugador_enemigo(self.jugador, self.enemigos)
+
+        if self.jugador.vidas <= 0:
+            self.running = False
 
 
     def handle_events(self):
@@ -55,7 +61,7 @@ class Game:
 
 
 #           DEPURAR
-        recuadros(self)
+        #recuadros(self)
 
 #           SUELO
 
