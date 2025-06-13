@@ -1,4 +1,8 @@
+def soundeffects(self):
+    pass
+
 class Animacion:
+    
     def __init__(self, frames, velocidad):
         self.frames = frames
         self.velocidad = velocidad

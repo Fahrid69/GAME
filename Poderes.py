@@ -1,5 +1,5 @@
 from constants import *
-from animation import Animacion
+from soundeffects import Animacion
 
 import pygame
 
