@@ -28,7 +28,7 @@ class Game:
 #           - 
         goomba = Goomba("Goomba", 1200, Y) #Instanciar a los goombas
         turtle = Turtle("Turtle", 300, Y)
-        self.enemigos.add(goomba)
+        self.enemigos.add()
 
         estrella = Estrella(900, Y)
         hongo_verde = Hongo_verde(700, Y)

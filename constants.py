@@ -23,25 +23,6 @@ D_PODERES = "assets/sprites/powers/"
 E_JUGADOR = (60,60)
 
 # ALMACENAR LOS SPRITES:
-SPRITES_JUGADOR = {
-    "mm1": {
-        "iddle": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/idle/10_idle_mm1.png"),(60,60)),
-        "run1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/run/10_run_mm1.png"),(60,60)),
-        "run2": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/run/11_run_mm1.png"),(60,60)),
-        "run3": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/run/12_run_mm1.png"),(60,60)),
-        "run4": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/run/13_run_mm1.png"),(60,60)),
-        "jump1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm1/jump/10_jump_mm1.png"),(60,60))
-    },
-    "mm2": {
-        "iddle": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/idle/20_idle_mm2.png"),(60,80)),
-        "run1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/run/20_run_mm2.png"),(60,80)),
-        "run2": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/run/21_run_mm2.png"),(60,80)),
-        "run3": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/run/22_run_mm2.png"),(60,80)),
-        "run4": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/run/23_run_mm2.png"),(60,80)),
-        "jump1": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}mm2/jump/20_jump_mm2.png"),(60,80))
-    },
-    "gameover": pygame.transform.scale(pygame.image.load(f"{D_JUGADOR}death/dead.png"), (60,60))
-}
 
 SPRITES_GOOMBA = {
     "brown": {

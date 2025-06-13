@@ -4,7 +4,7 @@ from soundeffects import Animacion
 
 import pygame, random
 
-class Enemigo(pygame.sprite.Sprite):
+class Enemigo(ABC, pygame.sprite.Sprite):
     def __init__(self, nombre, dx, dy):
         super().__init__()
         self.nombre = nombre
