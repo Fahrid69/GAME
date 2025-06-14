@@ -1,19 +1,30 @@
-def soundeffects(self):
-    pass
+import pygame
+class Sonidos:
+    def __init__(self):
+        pygame.mixer.init()
+        # Cargar la musica de fondo
+        self.sonido_fondo = pygame.mixer.Sound("assets/soundeffects/soundtrack/soundtrack.mp3")
+        self.sonido_fondo.set_volume(0.5)
+        self.sonido_fondo.play(-1) 
 
-class Animacion:
+        # Cargar los efectos de sonido del juego
+        #self.sonido_salir = pygame.mixer.Sound()
+        #self.sonido_moneda = pygame.mixer.Sound("assets/soundeffects/soundcoins/get_coin.wav")
+        self.sonido_saltar = pygame.mixer.Sound("assets/soundeffects/soundjump/jump.wav")
+        self.sonido_goomba = pygame.mixer.Sound("assets/soundeffects/soundamage/goomba/goomba.ogg")
+        #self.sonido_muerte = pygame.mixer.Sound()
+        #self.sonido_poder = pygame.mixer.Sound()
     
-    def __init__(self, frames, velocidad):
-        self.frames = frames
-        self.velocidad = velocidad
-        self.index =0
-        self.contador =0
-    
-    def actualizar(self):
-        self.contador +=1
-        if self.contador >= self.velocidad:
-            self.contador =0
-            self.index = (self.index + 1) % len(self.frames)
-    
-    def get_frame(self):
-        return self.frames[self.index]
+
+    def _reproducir_sonido_salto(self):
+        self.sonido_saltar.play()
+
+    def _reproducir_sonido_goomba(self):
+        self.sonido_goomba.play()
+
+"""
+    def _reproducir_daño_jugador(self):
+        self.sonido_daño.play()
+
+    def _reproducir_sonido_muerte(self):
+        self.sonido_muerte.play()"""

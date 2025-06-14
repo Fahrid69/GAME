@@ -1,58 +1,64 @@
-from Jugador import Jugador
-from Enemigo import Goomba, Turtle
-from Poderes import Hongo_rojo, Hongo_verde, Estrella, Moneda
-from Crash import *
-from constants import ANCHO_VENTANA, ALTO_VENTANA, X, Y
-from debug import recuadros
-
 import pygame
+
+from crash import *
+from constants import *
+from objects.debug import *
+from objects.Items import Moneda
+from objects.Jugador import Jugador
+from objects.Enemigo import Goomba, Turtle
+from objects.Poderes import Hongo_Rojo, Hongo_Verde, Estrella
+
 
 class Game:
     def __init__(self):
+        # Inicializar Pygame y crear la ventana del juego
         pygame.init()
-        pygame.display.set_caption("SMMC")
-        self.ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
+        pygame.display.set_caption(f"{TITULO}")
+        self.ventana = pygame.display.set_mode((DIMENSION_VENTANA))
         self.clock = pygame.time.Clock()
         self.running = True
         self.FPS = 60
         
-        self.spawn = 4000
-        self.tspawn = pygame.time.get_ticks()
+        # Manejar los tiempos de aparación de los objetos
 
-#           CREAR LOS GRUPOS:
+
+        # Definir los grupos de sprites
         self.enemigos = pygame.sprite.Group()
         self.poderes = pygame.sprite.Group()
+        self.items = pygame.sprite.Group()
         
-#           - INSTANCIAMIENTO: -
+
+        """Crear los objetos del juego"""
+
+        # Instanciar jugador
         self.jugador = Jugador("Mario Mosquera", 0, Y)
-#           - 
-        goomba = Goomba("Goomba", 1200, Y) #Instanciar a los goombas
+
+        # Instanciar enemigos
+        goomba = Goomba("Goomba", 1200, Y)
         turtle = Turtle("Turtle", 300, Y)
-        self.enemigos.add()
+        self.enemigos.add(goomba)
 
+        # Instanciar poderes
+        hongo_rojo = Hongo_Rojo(500, Y)
+        hongo_verde = Hongo_Verde(700, Y)
         estrella = Estrella(900, Y)
-        hongo_verde = Hongo_verde(700, Y)
-        hongo_rojo = Hongo_rojo(500, Y)
+        self.poderes.add(estrella)
 
-        moneda = Moneda(X, random.randint(400, Y))
+        # Colisiones
+        self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, None)
 
-        self.poderes.add()
         
     def update(self):
         self.jugador.update()
         self.enemigos.update()
         self.poderes.update()
-
-        collide_jugador_poder(self.jugador, self.poderes)
-        collide_jugador_enemigo(self.jugador, self.enemigos)
+        self.colisiones.detectar_colisiones()
 
     def handle_events(self):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 self.running = False
-        """
-        if self.jugador.vidas <= 0:
-            self.running = False"""
+
 
     def draw(self):
         self.ventana.fill((150, 200, 255))
@@ -67,12 +73,8 @@ class Game:
             rect_texto = texto.get_rect(center=(ANCHO_VENTANA//2, ALTO_VENTANA//2))
             self.ventana.blit(texto, rect_texto)
 
-
-
-#           DEPURAR
+        """DEPURACION"""
         #recuadros(self)
-
-#           SUELO
 
     def run(self):
         while self.running:     

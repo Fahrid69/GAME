@@ -1,6 +1,7 @@
 import pygame
 
 from constants import *
+from soundeffects import Sonidos
 from abc import ABC, abstractmethod
 
 
@@ -29,10 +30,10 @@ class Jugador(Personaje):
         super().__init__(nombre, dx, dy)
     
         self.vidas = 3
-        self.impulso_salto = 0
         self.puntos = 0
         self.gravedad = 1
         self.velocidad = 5
+        self.impulso_salto = 0
         
         self.estado = "normal"
         self.direccion = "der"
@@ -55,10 +56,13 @@ class Jugador(Personaje):
         self.run_frame_speed = 100
         self.run_total_frames = self.sprites["normal"]["run"].get_width() // 18 
 
+        # Definir la varriable para los sonidos del juego
+        self.sonidos = Sonidos()
 
-        # TEMPORIZADORES
-        self.tiempo_muerte = 0
-        self.tcooldown = 0
+
+        # Temporizadores para estados especiales
+        self.tiempo_moribundo = 0
+        self.tiempo_inmunidad = 0
 
 
     def update(self):
@@ -93,7 +97,7 @@ class Jugador(Personaje):
             self.impulso_salto = -20
             self.is_grounded = False
             self.is_jumping = True
-            SOUNDEFFECTS["salto"].play()
+            self.sonidos._reproducir_sonido_salto()
 
     def _mover_derecha(self):
         self.dx += self.velocidad
@@ -116,7 +120,6 @@ class Jugador(Personaje):
 
         if self.dy >= Y:
             self.dy = Y
-            self.impulso_salto = 0
             self.is_jumping = False
             self.is_grounded = True
 
@@ -155,8 +158,8 @@ class Jugador(Personaje):
 
 
     def _procesar_muerte(self):
-        self.tiempo_muerte = pygame.time.get_ticks()
-        if pygame.time.get_ticks() - self.tiempo_muerte > 2000:
+        self.tiempo_moribundo = pygame.time.get_ticks()
+        if pygame.time.get_ticks() - self.tiempo_moribundo > 2000:
             self.vidas -= 1
             print(f"vidas: {self.vidas}")
             self.estado = "normal"
@@ -174,15 +177,15 @@ class Jugador(Personaje):
     def cargar_sprites(self, ):
         return {
             "normal": {
-                "idle": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm1/idle/10_idle_mm1.png"), (self.sprites_size)),
+                "idle": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm1/idle/idle.png"), (self.sprites_size)),
                 "run": pygame.image.load("assets/sprites/player/Jugador/mm1/run/run.png"),
-                "jump": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm1/jump/10_jump_mm1.png"), (self.sprites_size))
+                "jump": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm1/jump/jump.png"), (self.sprites_size))
             },
             "gigante": {
-                "idle": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm2/idle/20_idle_mm2.png"), (self.sprites_size)),
+                "idle": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm2/idle/idle.png"), (self.sprites_size)),
                 "run": pygame.image.load("assets/sprites/player/Jugador/mm2/run/run.png"),
-                "jump": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm2/jump/20_jump_mm2.png"), (self.sprites_size)),
-                "crouch": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm2/crouch/20_crouch_mm2.png"), (self.sprites_size))
+                "jump": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm2/jump/jump.png"), (self.sprites_size)),
+                "crouch": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/mm2/crouch/crouch.png"), (self.sprites_size))
             },
             "muerto": {
                 "dead": pygame.transform.scale(pygame.image.load("assets/sprites/player/Jugador/death/dead.png"), (self.sprites_size))
