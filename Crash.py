@@ -42,7 +42,7 @@ class Colisiones:
                     enemigo.velocidad = 0
                     enemigo.image = enemigo.sprites["green"]["shell"]
                     enemigo.rect = enemigo.image.get_rect(topleft=(enemigo.rect.x, enemigo.rect.y))
-                    SOUNDEFFECTS["turtle"].play()
+                    #SOUNDEFFECTS["turtle"].play()
                     return
 
             if self.jugador.versiones == "mm2":
@@ -67,17 +67,17 @@ class Colisiones:
                 if poder.nombre == "New Change":
                     self.jugador.vidas += 1
                     self.poderes.remove(poder)
-                    SOUNDEFFECTS["gigante"].play()
+                    #SOUNDEFFECTS["gigante"].play()
                 
                 if poder.nombre == "Gigante":
                     self.jugador.crecer()
-                    SOUNDEFFECTS["vida"].play()
+                    #SOUNDEFFECTS["vida"].play()
                     self.remove(poder)
                 
                 if poder.colision.nombre == "Inmunidad":
                     self.jugador.inmunidad()
                     self.jugador.velocidad = 7
-                    SOUNDEFFECTS["star"].play()
+                    #SOUNDEFFECTS["star"].play()
                     self.poderes.remove(poder)
                 
 """

@@ -97,7 +97,7 @@ class Jugador(Personaje):
             self.impulso_salto = -20
             self.is_grounded = False
             self.is_jumping = True
-            self.sonidos._reproducir_sonido_salto()
+            self.sonidos._reproducir_sonido_salto() 
 
     def _mover_derecha(self):
         self.dx += self.velocidad
@@ -169,7 +169,7 @@ class Jugador(Personaje):
                 self.image = self.sprites["muerto"]["dead"]
                 self.rect = self.image.get_rect(topleft=(self.dx, self.dy))
                 print("GAMEOVER")
-                SOUNDEFFECTS["GAMEOVER"].play()
+                #["GAMEOVER"].play()
 
     def _actualizar_rect(self):
         self.rect = self.image.get_rect(bottomleft=(self.dx, self.dy))
