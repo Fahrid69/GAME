@@ -120,6 +120,7 @@ class Jugador(Personaje):
 
         if self.dy >= Y:
             self.dy = Y
+            self.impulso_salto = 0
             self.is_jumping = False
             self.is_grounded = True
 
