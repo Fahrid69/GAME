@@ -1,6 +1,7 @@
 import pygame
 
 from constants import *
+from objects.Jugador import Jugador
 from soundeffects import Sonidos
 from abc import ABC, abstractmethod
 
@@ -117,7 +118,7 @@ class Goomba(Enemigo):
     def _correr_tiempo_muerte(self):
         tiempo = pygame.time.get_ticks() - self.tiempo_desaparicion
         if tiempo > 1000:
-            #self.jugador.puntos += 100
+            self.jugador.puntos += 100
             self.kill()
 
 

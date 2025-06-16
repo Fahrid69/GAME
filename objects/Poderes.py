@@ -28,7 +28,7 @@ class Hongo_Rojo(Poder):
         """ATRIBUTOS DEL HONGO ROJO"""
 
         # Atributos de sprites
-        self.dimension = (50, 50)
+        self.dimension = (45, 45)
         self.sprites = self.cargar_sprites_sheet()
         self.image = self.sprites["mushroom"].subsurface((0, 0, 18, 18))
         self.image = pygame.transform.scale(self.image, self.dimension)
@@ -37,7 +37,7 @@ class Hongo_Rojo(Poder):
         # Atributos de animación
         self.run_frame_index = 0
         self.run_frame_timer = 0
-        self.run_frame_speed = 200
+        self.run_frame_speed = 125
         self.run_total_frames = self.sprites["mushroom"].get_width() // 18
 
     def update(self):
@@ -60,6 +60,7 @@ class Hongo_Rojo(Poder):
             "mushroom": pygame.image.load("assets/sprites/powers/Hongos/hr/mushroom.png")
         }
 
+
 class Hongo_Verde(Poder):
     def __init__(self, dx, dy):
         super().__init__("+1HP", dx, dy)
@@ -67,7 +68,7 @@ class Hongo_Verde(Poder):
         """ATRIBUTOS DEL HONGO VERDE"""
 
         # Atributos de sprites
-        self.dimension = (50,50)
+        self.dimension = (45, 45)
         self.sprites = self.cargar_sprites_sheet()  
         self.image = self.sprites["mushroom"].subsurface((0, 0, 18, 18))
         self.image = pygame.transform.scale(self.image, self.dimension)
@@ -99,6 +100,7 @@ class Hongo_Verde(Poder):
             "mushroom": pygame.image.load("assets/sprites/powers/Hongos/hv/mushroom.png")
         }
     
+
 class Estrella(Poder):
     def __init__(self, dx, dy):
         super().__init__("Inmunidad", dx, dy)

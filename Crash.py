@@ -1,6 +1,7 @@
 import pygame
 
 from constants import *
+from soundeffects import Sonidos
 from objects.Jugador import Jugador
 from objects.Enemigo import Goomba,Turtle
 
@@ -11,8 +12,12 @@ class Colisiones:
         self.poderes = poderes
         self.items = items
 
+        self.sonidos = Sonidos()
+
     def detectar_colisiones(self):
         self._jugador_vs_enemigos()
+        self._jugador_vs_poderes()
+        self._jugador_vs_items()
 
     def _jugador_vs_enemigos(self):
         enemigo = pygame.sprite.spritecollideany(self.jugador, self.enemigos)
@@ -30,6 +35,7 @@ class Colisiones:
             # Si el jugador está en estado normal y colisiona con un enemigo
             if isinstance(enemigo, Goomba):            
                 if self.jugador.rect.bottom >= enemigo.rect.top + 10 and self.jugador.impulso_salto > 0:
+                    print("pasapsa")
                     self.jugador.impulso_salto = -20
                     enemigo._procesar_muerte_aplastamiento()
                     return
@@ -45,12 +51,6 @@ class Colisiones:
                     #SOUNDEFFECTS["turtle"].play()
                     return
 
-            if self.jugador.versiones == "mm2":
-                self.jugador.estado = "normal"
-                self.jugador.versiones = "mm1"
-                #SOUNDEFFECTS["daño2"].play()
-                return
-
             
             if pygame.sprite.collide_rect(self.jugador, enemigo):
                 self.jugador._procesar_muerte()
@@ -64,62 +64,21 @@ class Colisiones:
     def _jugador_vs_poderes(self):
         poder = pygame.sprite.spritecollideany(self.jugador, self.poderes)
         if poder:
-                if poder.nombre == "New Change":
-                    self.jugador.vidas += 1
-                    self.poderes.remove(poder)
-                    #SOUNDEFFECTS["gigante"].play()
-                
-                if poder.nombre == "Gigante":
-                    self.jugador.crecer()
-                    #SOUNDEFFECTS["vida"].play()
-                    self.remove(poder)
-                
-                if poder.colision.nombre == "Inmunidad":
-                    self.jugador.inmunidad()
-                    self.jugador.velocidad = 7
-                    #SOUNDEFFECTS["star"].play()
-                    self.poderes.remove(poder)
-                
-"""
-                if poder.nombre == "Moneda":
-                    SOUNDEFFECTS["coin"].play()
-                    poderes.remove(colision)
+            # Si colisiona con el hongo verde
+            if poder.nombre == "+1HP":  
+                self.jugador._incrementar_vida()
+                self.poderes.remove(poder)
+            
+            # Si colisiona con el hongo rojo
+            if poder.nombre == "Gigante":
+                self.jugador._activar_gigante()
+                self.poderes.remove(poder)
+            
+            # Si colisiona con las estrellas
+            if poder.nombre == "Inmunidad":
+                self.jugador._activar_inmunidad()
+                self.poderes.remove(poder)
 
-
-def collide_jugador_enemigo(jugador, enemigos):
-    enemigo = pygame.sprite.spritecollideany(jugador, enemigos)
-
-    # Si no hay colisión con un enemigo, o el enemigo no es un Goomba o Turtle, o el jugador no está en estado normal
-    if not enemigo:
-        return
-
-    # 
-    if not isinstance(enemigo, (Goomba, Turtle)):
-        return
-     
-    if jugador.estado != "normal":
-        return
-    
-    # Si llegamos aquí, hay colisión válida con un enemigo y el jugador está en estado normal
-    if jugador.rect.bottom >= enemigo.rect.top + 10 and jugador.impulso_salto > 0:
-        enemigo.estado = "muerto"
-        jugador.salto = -15
-        return
-
-    # Si el jugador es grande (mm2) y es golpeado
-    if jugador.versiones == "mm2":
-        jugador.estado = "normal"
-        jugador.versiones = "mm1"
-        SOUNDEFFECTS["daño2"].play()
-        return
-
-    # Si el jugador es pequeño (mm1) y es golpeado
-    jugador.death()
-    if jugador.vidas > 0:
-        SOUNDEFFECTS["daño2"].play()
-                                
-    elif jugador.estado == "inmunidad":
-        print("eliminando a los enemigos")
-        enemigo.death()
-        
-"""
+    def _jugador_vs_items(self):
+        pass
+            

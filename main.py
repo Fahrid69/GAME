@@ -18,6 +18,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.FPS = 60
+
+        # Tipografia
+        self.tipografia_fuente = pygame.font.Font("assets/fonts/fuente/PixelDigivolve.ttf",30)
         
         # Manejar los tiempos de aparación de los objetos
 
@@ -42,7 +45,7 @@ class Game:
         hongo_rojo = Hongo_Rojo(500, Y)
         hongo_verde = Hongo_Verde(700, Y)
         estrella = Estrella(900, Y)
-        self.poderes.add(estrella)
+        self.poderes.add(hongo_rojo)
 
         # Colisiones
         self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, None)
@@ -62,16 +65,52 @@ class Game:
 
     def draw(self):
         self.ventana.fill((150, 200, 255))
-        self.ventana.blit(self.jugador.image, self.jugador.rect)
-        self.enemigos.draw(self.ventana)
-        self.poderes.draw(self.ventana)
+
+        # Dibujar la información del jugador
+        self._draw_stats_info()
+
+        # Dibujar lo demas
+        self._draw_player()
+        self._draw_enemies()
+        self._draw_powers()
+
+        # Dibujar la pantalla final
+        self._game_over()
+
         self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))
 
+    def _draw_stats_info(self):
+        texto_vidas = self.tipografia_fuente.render(f"vidas restantes: {self.jugador.vidas}", False, (255, 255, 255))
+        texto_puntos = self.tipografia_fuente.render(f"puntos acumulados: {self.jugador.puntos}", True, (255, 255, 255))
+        self.ventana.blit(texto_vidas, (100, 100))
+        self.ventana.blit(texto_puntos, (500, 100))
+
+    def _draw_player(self):
+        self.ventana.blit(self.jugador.image, self.jugador.rect)
+
+    def _draw_enemies(self):
+        for enemigo in self.enemigos:
+            self.ventana.blit(enemigo.image, enemigo.rect)
+    
+    def _draw_powers(self):
+        for poder in self.poderes:
+            self.ventana.blit(poder.image, poder.rect)
+
+    def _game_over(self):
         if self.jugador.vidas == 0:
             fuente = pygame.font.SysFont("Times New Roman", 50, bold=True)
             texto = fuente.render("GAME OVER", True, (255, 0, 0))
             rect_texto = texto.get_rect(center=(ANCHO_VENTANA//2, ALTO_VENTANA//2))
+            self.ventana.fill((0,0,0))
             self.ventana.blit(texto, rect_texto)
+
+            # remover todos los sprites de enemigos y poderes
+            self.jugador.kill()
+            self.enemigos.empty()
+            self.poderes.empty()
+            
+            
+
 
         """DEPURACION"""
         #recuadros(self)

@@ -14,14 +14,14 @@ DIMENSION_VENTANA = (1380, 720)  # Ancho, Alto
 ANCHO_VENTANA = 1380
 ALTO_VENTANA = 720
 
-TITULO = "[GAME SMMB] Super Mario Maker Bros"
+TITULO = ">_game_SuperMarioBros.py"
 
 # con esta modifica el suelo real del juego a los objetos
 X = random.randint(100,ANCHO_VENTANA - 50)
 Y = 640                               #640
 
 ## IMGS
-FONDO = pygame.transform.scale(pygame.image.load("Assets/font/front.png"), (ANCHO_VENTANA, 91))
+FONDO = pygame.transform.scale(pygame.image.load("Assets/fonts/front.png"), (ANCHO_VENTANA, 91))
 
 
 
