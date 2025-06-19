@@ -14,8 +14,9 @@ class Sonidos:
         self.sonido_hv = pygame.mixer.Sound("assets/soundeffects/soundpower/hv/green-mushroom.mp3")
         self.sonido_inmunidad = pygame.mixer.Sound("assets/soundeffects/soundpower/star/power_inmunity.wav")
         self.sonido_saltar = pygame.mixer.Sound("assets/soundeffects/soundjump/jump.wav")
-        self.sonido_goomba = pygame.mixer.Sound("assets/soundeffects/soundamage/goomba/goomba.ogg")
-        self.sonido_moribundo = pygame.mixer.Sound("assets/soundeffects/soundamage/player/t-t-t-tdum.wav")
+        self.sonido_goomba = pygame.mixer.Sound("assets/soundeffects/soundamage/goomba/dolor.ogg")
+        self.sonido_turtle = pygame.mixer.Sound("assets/soundeffects/soundamage/turtle/dolor.wav")
+        self.sonido_moribundo = pygame.mixer.Sound("assets/soundeffects/soundamage/player/dolor.wav")
         self.sonido_muerte = pygame.mixer.Sound("assets/soundeffects/soundtrack/game-over_deep.mp3")
         #self.sonido_poder = pygame.mixer.Sound()
     
@@ -30,6 +31,8 @@ class Sonidos:
         self.sonido_saltar.play()
     def _reproducir_sonido_goomba(self):
         self.sonido_goomba.play()
+    def _reproducir_sonido_turtle(self):
+        self.sonido_turtle.play()
     def _reproducir_sonido_moribundo(self):
         self.sonido_moribundo.play()
     def _reproducir_sonido_gameover(self):

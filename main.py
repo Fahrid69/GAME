@@ -20,10 +20,10 @@ class Game:
         self.FPS = 60
 
         # Tipografia
-        self.tipografia_fuente = pygame.font.Font("assets/fonts/fuente/PixelDigivolve.ttf",30)
+        self.tipografia_fuente = pygame.font.Font("assets/fonts/fuente/PixelDigivolve.ttf", 30)
         
         # Manejar los tiempos de aparación de los objetos
-
+        # Proximamente...
 
         # Definir los grupos de sprites
         self.enemigos = pygame.sprite.Group()
@@ -31,21 +31,24 @@ class Game:
         self.items = pygame.sprite.Group()
         
 
-        """Crear los objetos del juego"""
+        """Crear las instancias del juego"""
 
         # Instanciar jugador
         self.jugador = Jugador("Mario Mosquera", 0, Y)
 
         # Instanciar enemigos
-        goomba = Goomba("Goomba", 1200, Y)
-        turtle = Turtle("Turtle", 300, Y)
-        self.enemigos.add(goomba)
+        goomba = Goomba("Goomba", 1200, Y, self.jugador)
+        turtle = Turtle("Turtle", 300, Y, self.jugador)
+        self.enemigos.add(goomba, turtle)
 
         # Instanciar poderes
         hongo_rojo = Hongo_Rojo(500, Y)
         hongo_verde = Hongo_Verde(700, Y)
         estrella = Estrella(900, Y)
-        self.poderes.add(hongo_rojo)
+        self.poderes.add(hongo_rojo, hongo_verde, estrella)
+
+        # Instanciar items
+        # Proximamente
 
         # Colisiones
         self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, None)
@@ -81,9 +84,11 @@ class Game:
 
     def _draw_stats_info(self):
         texto_vidas = self.tipografia_fuente.render(f"vidas restantes: {self.jugador.vidas}", False, (255, 255, 255))
-        texto_puntos = self.tipografia_fuente.render(f"puntos acumulados: {self.jugador.puntos}", True, (255, 255, 255))
+        texto_puntos = self.tipografia_fuente.render(f"puntos: {self.jugador.puntos}", True, (255, 255, 255))
+        texto_dinero = self.tipografia_fuente.render(f"monedas: {self.jugador.puntos}", True, (255, 255, 0))
         self.ventana.blit(texto_vidas, (100, 100))
         self.ventana.blit(texto_puntos, (500, 100))
+        self.ventana.blit(texto_dinero, (750, 100))
 
     def _draw_player(self):
         self.ventana.blit(self.jugador.image, self.jugador.rect)
@@ -97,11 +102,9 @@ class Game:
             self.ventana.blit(poder.image, poder.rect)
 
     def _game_over(self):
-        if self.jugador.vidas == 0:
-            fuente = pygame.font.SysFont("Times New Roman", 50, bold=True)
-            texto = fuente.render("GAME OVER", True, (255, 0, 0))
+        if self.jugador.vidas < 1:
+            texto = self.tipografia_fuente.render(f"GAME - OVER", True, (255, 0, 0))
             rect_texto = texto.get_rect(center=(ANCHO_VENTANA//2, ALTO_VENTANA//2))
-            self.ventana.fill((0,0,0))
             self.ventana.blit(texto, rect_texto)
 
             # remover todos los sprites de enemigos y poderes

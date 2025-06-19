@@ -26,6 +26,9 @@ class Hongo_Rojo(Poder):
         super().__init__("Gigante", dx, dy)
 
         """ATRIBUTOS DEL HONGO ROJO"""
+        # Atributos generales
+        self.velocidad = 2
+        self.direccion = -1
 
         # Atributos de sprites
         self.dimension = (45, 45)
@@ -41,7 +44,17 @@ class Hongo_Rojo(Poder):
         self.run_total_frames = self.sprites["mushroom"].get_width() // 18
 
     def update(self):
+        self._moverse()
+        self._actualizar_rect()
         self._animar_movimiento()
+
+
+    def _moverse(self):
+        self.dx += self.direccion * self.velocidad
+
+        # Chocarse con los limites visibles
+        if self.dx < 0 or self.dx >= ANCHO_VENTANA - self.rect.width:
+            self.direccion *= -1
 
     def _animar_movimiento(self):
         now = pygame.time.get_ticks()
@@ -55,6 +68,11 @@ class Hongo_Rojo(Poder):
         frame = pygame.transform.scale(frame, self.dimension)
         self.image = frame
 
+
+    def _actualizar_rect(self):
+        self.rect.bottomleft = (self.dx, self.dy)
+
+
     def cargar_sprites_sheet(self):
         return {
             "mushroom": pygame.image.load("assets/sprites/powers/Hongos/hr/mushroom.png")
@@ -66,6 +84,9 @@ class Hongo_Verde(Poder):
         super().__init__("+1HP", dx, dy)
 
         """ATRIBUTOS DEL HONGO VERDE"""
+        # Atributos generales
+        self.velocidad = 3
+        self.direccion = 1
 
         # Atributos de sprites
         self.dimension = (45, 45)
@@ -81,7 +102,17 @@ class Hongo_Verde(Poder):
         self.run_total_frames = self.sprites["mushroom"].get_width() // 18
 
     def update(self):
+        self._moverse()
+        self._actualizar_rect()
         self._animar_movimiento()
+
+
+    def _moverse(self):
+        self.dx += self.direccion * self.velocidad
+
+        # Chocarse con los limites:
+        if self.dx < 0 or self.dx >= ANCHO_VENTANA - self.rect.width:
+            self.direccion *= -1
 
     def _animar_movimiento(self):
         now = pygame.time.get_ticks()
@@ -94,6 +125,10 @@ class Hongo_Verde(Poder):
         frame = sheet.subsurface(frame_rect)
         frame = pygame.transform.scale(frame, self.dimension)
         self.image = frame
+
+
+    def _actualizar_rect(self):
+        self.rect.bottomleft = (self.dx, self.dy)
 
     def cargar_sprites_sheet(self):
         return {

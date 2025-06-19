@@ -29,7 +29,7 @@ class Jugador(Personaje):
     def __init__(self, nombre, dx, dy):
         super().__init__(nombre, dx, dy)
     
-        # Lógica de atributos en entero
+        # Lógica de atributos de numero:
         self.vidas = 3
         self.puntos = 0
         self.gravedad = 1
@@ -37,27 +37,28 @@ class Jugador(Personaje):
         self.salto = 20
         self.impulso_salto = 0
         
-        # Lógica de atributos en cadena
-        self.estado = "normal"  # Estados posibles: "normal", "moribundo", "muerto", "inmunidad", "gigante"
-        self.direccion = "der"
-        self.poder_activo = "ninguno" # Poderes posibles: "ninguno", "gigante", "inmunidad"
+        # Lógica de atributos en cadena:
+        self.current_status_size = "normal" # Estados pósible de tamaño: "Normal", "Gigante"
+        self.current_status_temporal = "ninguno" # Estados posible temporádicos: "Ninguno", "Inmunidad"
+        self.current_status_life = "vivo" # Estados posibles de vida: "Vivo", "Moribundo", "muerto".
+        self.current_side = "der"
 
-        # Lógica de atributos booleana
+        # Lógica de atributos en bool:
         self.is_dead = False
         self.is_jumping = False
         self.is_grounded = True
         self.is_moving = False
 
-        # Atributos de sprites
-        self.dimension = (64, 64)  # Tamaño de los sprites del jugador
+        # Atributos de sprites: cargue, tamaño, imágen
+        self.dimension = (64, 64)  # Tamaño normal de los sprites del jugador
         self.sprites = self.cargar_sprites()
-        self.image = self.sprites["normal"]["idle"]
+        self.image = self.sprites[self.current_status_size]["idle"]
         self.rect = self.image.get_rect(topleft=(dx, dy))
-
+        # Atributos de sprites: animación 
         self.run_frame_index = 0
         self.run_frame_timer = 0
         self.run_frame_speed = 100
-        self.run_total_frames = self.sprites["normal"]["run"].get_width() // 18 if self.estado == "normal" else self.sprites["gigante"]["run"]
+
 
         # Definir la varriable para los sonidos del juego
         self.sonidos = Sonidos()
@@ -71,13 +72,11 @@ class Jugador(Personaje):
     def update(self):
         self._aplicar_gravedad()
         self._actualizar_rect()
-        if self.estado == "normal" or self.estado == "inmunidad":
-            self._manejar_controles()
-            self._actualizar_animacion()
-            self._manejar_estados_especiales()
-            #self._verificar_cambio_version()
+        self._manejar_controles()
+        self._actualizar_animacion()
+        self._manejar_estados_especiales()
         
-        if self.estado == "moribundo":
+        if self.current_status_life == "moribundo":
             self._correr_tiempo_moribundeo()
             self._moribundeo()
 
@@ -101,11 +100,11 @@ class Jugador(Personaje):
             self._mover_izquierda()
 
         # Movimiento exclusivo
-        if self.estado == "gigante":
+        if self.current_status_size == "gigante":
             if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not (self.is_moving and self.is_grounded):
-                self._agacharse()
+                self._animar_agacharse_grande()
 
-                
+
     def _realizar_salto(self):
         if self.is_grounded and not self.is_jumping:
             self.impulso_salto = self.salto * -1
@@ -115,14 +114,14 @@ class Jugador(Personaje):
 
     def _mover_derecha(self):
         self.dx += self.velocidad
-        self.direccion = "der"
+        self.current_side = "der"
         self.is_moving = True
         if self.dx > ANCHO_VENTANA - self.rect.width:
             self.dx = ANCHO_VENTANA - self.rect.width
 
     def _mover_izquierda(self):
         self.dx -= self.velocidad
-        self.direccion = "izq"
+        self.current_side = "izq"
         self.is_moving = True
         if self.dx < 0:
             self.dx = 0
@@ -140,7 +139,7 @@ class Jugador(Personaje):
 
 
     def _actualizar_animacion(self):
-        if not self.is_grounded:
+        if self.is_jumping:
             self._animar_salto()
         elif self.is_moving:
             self._animar_correr()
@@ -148,46 +147,42 @@ class Jugador(Personaje):
             self._animar_inactivo()
 
     def _animar_salto(self):
-        if self.estado == "normal" or self.estado == "inmunidad":
-            self.image = self.sprites["normal"]["jump"] 
-            if self.direccion == "izq":
-                self.image = pygame.transform.flip(self.image, True, False)
-        elif self.estado == "gigante":
-            self.image = self.sprites["gigante"]["jump"]
-            if self.direccion == "izq":
-                self.image = pygame.transform.flip(self.image, True, False)
+        self.image = self.sprites[self.current_status_size]["jump"] 
+        if self.current_side == "izq":
+            self.image = pygame.transform.flip(self.image, True, False)
 
     def _animar_correr(self):
         now = pygame.time.get_ticks()
         if now - self.run_frame_timer > self.run_frame_speed:
-            self.run_frame_index = (self.run_frame_index + 1) % self.run_total_frames
+            self.run_frame_index = (self.run_frame_index + 1) % 4
             self.run_frame_timer = now
 
-        sheet = self.sprites["normal"]["run"]
-        frame_rect = pygame.Rect(self.run_frame_index * 18, 0, 18, 18)
+
+        ancho, alto = (18, 18) if self.current_status_size == "normal" else (20, 28)
+            
+        sheet = self.sprites[self.current_status_size]["run"]
+        frame_rect = pygame.Rect(self.run_frame_index * ancho, 0, ancho, alto)
         frame = sheet.subsurface(frame_rect)
         frame = pygame.transform.scale(frame, self.dimension)
 
-        if self.direccion == "izq":
+        if self.current_side == "izq":
             frame = pygame.transform.flip(frame, True, False)
         self.image = frame
 
     def _animar_inactivo(self):
-        self.image = self.sprites["normal"]["idle"]
-        if self.direccion == "izq":
+        self.image = self.sprites[self.current_status_size]["idle"]
+        if self.current_side == "izq":
             self.image = pygame.transform.flip(self.image, True, False)
 
-    def _agacharse(self):
+    def _animar_agacharse_grande(self):
         self.image = self.sprites["gigante"]["crouch"]
-        if self.direccion == "izq":
+        if self.current_side == "izq":
             self.image = pygame.transform.flip(self.image, True, False)
 
 
     def _manejar_estados_especiales(self):
-        # Estados especiales como: "gigante", "inmune".
-        if self.estado == "gigante":
-            self._desactivar_gigante()
-        elif self.estado == "inmunidad":
+        # Estados especiales como: "inmune".
+        if self.current_status_temporal == "inmunidad":
             self._desactivar_inmunidad()
 
     def _incrementar_vida(self):
@@ -195,40 +190,45 @@ class Jugador(Personaje):
         self.sonidos._reproducir_sonido_hv()
 
     def _activar_gigante(self):
-        self.estado = "gigante"
+        self.dimension = (64, 80)
+        self.current_status_size = "gigante"
+        self.sprites = self.cargar_sprites()
         self.sonidos._reproducir_sonido_hr()
 
     def _desactivar_gigante(self):
-        pass
+        self.dimension = (64, 64)
+        self.sprites = self.cargar_sprites()
+        self.current_status_size = "normal"
 
     def _activar_inmunidad(self):
-        self.estado = "inmunidad"
+        self.current_status_temporal = "inmunidad"
         self.velocidad = 6
         self.tiempo_inmunidad = pygame.time.get_ticks()
         self.sonidos._reproducir_sonido_inmunidad()
 
     def _desactivar_inmunidad(self):
         tiempo = pygame.time.get_ticks() - self.tiempo_inmunidad
-        if tiempo > 9000:
-            self.estado = "normal"
+        #print(tiempo)
+        if tiempo >= 9000:
+            self.current_status_temporal = "ninguno"
             self.velocidad = 5
 
     def _procesar_muerte(self):
-        self.estado = "moribundo"
+        self.current_status_life = "moribundo"
         self.tiempo_moribundo = pygame.time.get_ticks()
         if self.vidas > 1:
             self.sonidos._reproducir_sonido_moribundo()
 
         if self.vidas == 1:
             self.is_dead = True
-            self.estado = "muerto"
+            self.current_status_life = "muerto"
             self.sonidos._reproducir_sonido_gameover()
 
     def _correr_tiempo_moribundeo(self):
         tiempo = pygame.time.get_ticks() - self.tiempo_moribundo
         if tiempo > 2000:
             self.vidas -= 1
-            self.estado = "normal"
+            self.current_status_life = "vivo"
             self.impulso_salto = 0
             self.is_grounded = False
             self.is_jumping = True
@@ -240,6 +240,7 @@ class Jugador(Personaje):
             self.is_jumping = True
         self.image = self.sprites["muerto"]["dead"]
             
+
     def _actualizar_rect(self):
         self.rect = self.image.get_rect(bottomleft=(self.dx, self.dy))
 

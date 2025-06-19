@@ -19,46 +19,44 @@ class Colisiones:
         self._jugador_vs_poderes()
         self._jugador_vs_items()
 
+
     def _jugador_vs_enemigos(self):
-        enemigo = pygame.sprite.spritecollideany(self.jugador, self.enemigos)
-        
-        # Si no hay colisión con un enemigo, o el enemigo no es un Goomba o Turtle, o el jugador no está en estado normal
-        if not enemigo or not isinstance(enemigo, (Goomba, Turtle)) or self.jugador.estado != "normal":
+        # Si el jugador no está en estado vivo realmente, ignora las colisiones con enemigos vivos por si acaso
+        if self.jugador.current_status_life != "vivo":
             return
 
-        
-        for enemigo in self.enemigos:
-            # Si el enemigo no está vivo, ps salta a la siguiente iteración
-            if enemigo.estado != "vivo":
-                continue
+        # Detectar colisión con cualquier enemigo vivo
+        enemigo = pygame.sprite.spritecollideany(self.jugador,
+            [enemigo for enemigo in self.enemigos if enemigo.current_status == "vivo"])
 
-            # Si el jugador está en estado normal y colisiona con un enemigo
-            if isinstance(enemigo, Goomba):            
-                if self.jugador.rect.bottom >= enemigo.rect.top + 10 and self.jugador.impulso_salto > 0:
-                    print("pasapsa")
-                    self.jugador.impulso_salto = -20
-                    enemigo._procesar_muerte_aplastamiento()
-                    return
+        # Si no hay colisiones se va
+        if not enemigo:
+            return
 
-            if isinstance(enemigo, Turtle):
-                if self.jugador.rect.bottom >= enemigo.rect.top + 10 and self.jugador.impulso_salto > 0:
-                    self.jugador.impulso_salto = -15
-                    enemigo.estado = "muerto"
-                    enemigo.direccion_movimiento = 0
-                    enemigo.velocidad = 0
-                    enemigo.image = enemigo.sprites["green"]["shell"]
-                    enemigo.rect = enemigo.image.get_rect(topleft=(enemigo.rect.x, enemigo.rect.y))
-                    #SOUNDEFFECTS["turtle"].play()
-                    return
 
+        # Verificar si el jugador cae sobre el enemigo (colisión desde arriba)
+        if self.jugador.rect.bottom >= enemigo.rect.top + 10 and self.jugador.is_jumping:
+            self.jugador.impulso_salto = -20
+
+            # Llamamos al método especifico de muerte por aplastamiento
+            if isinstance(enemigo, (Goomba, Turtle)): 
+                enemigo._procesar_muerte_aplastamiento()
+                return
+
+        # Si verificar colisión lateral o frontal
+        if pygame.sprite.collide_rect(self.jugador, enemigo):
+            # Primero verificar si el jugador está en estado de inmunidad (tiene prioridad)
+            if self.jugador.current_status_temporal == "inmunidad":
+                enemigo.kill() 
+                return  # se devuelve
             
-            if pygame.sprite.collide_rect(self.jugador, enemigo):
-                self.jugador._procesar_muerte()
-
-
-            if self.jugador.estado == "inmunidad":
-                print("Eliminando a los enemigos")
-                enemigo.kill()
+            # Si no es inmune, verificar si está en estado gigante
+            if self.jugador.current_status_size == "gigante":
+                self.jugador._desactivar_gigante()  # Reduce de tamaño sin perder vida
+                return
+                        
+            # Si no es inmune ni gigante, procesa daño normal
+            self.jugador._procesar_muerte()                        
 
 
     def _jugador_vs_poderes(self):
@@ -78,6 +76,7 @@ class Colisiones:
             if poder.nombre == "Inmunidad":
                 self.jugador._activar_inmunidad()
                 self.poderes.remove(poder)
+
 
     def _jugador_vs_items(self):
         pass
