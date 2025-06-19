@@ -2,8 +2,8 @@ import pygame
 
 from constants import *
 from soundeffects import Sonidos
-from objects.Jugador import Jugador
-from objects.Enemigo import Goomba,Turtle
+from components.Jugador import Jugador
+from components.Enemigo import Goomba,Turtle
 
 class Colisiones:
     def __init__(self, jugador, enemigos, poderes, items):

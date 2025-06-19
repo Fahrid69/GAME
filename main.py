@@ -1,12 +1,12 @@
 import pygame
 
-from crash import *
 from constants import *
-from objects.debug import *
-from objects.Items import Moneda
-from objects.Jugador import Jugador
-from objects.Enemigo import Goomba, Turtle
-from objects.Poderes import Hongo_Rojo, Hongo_Verde, Estrella
+from components.crash import *
+from components.debug import *
+from components.Items import Moneda
+from components.Jugador import Jugador
+from components.Enemigo import Goomba, Turtle
+from components.Poderes import Hongo_Rojo, Hongo_Verde, Estrella
 
 
 class Game:

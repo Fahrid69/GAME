@@ -1,7 +1,7 @@
 import pygame
 
 from constants import *
-from objects.Jugador import Jugador
+from components.Jugador import Jugador
 from soundeffects import Sonidos
 from abc import ABC, abstractmethod
 
