@@ -5,7 +5,7 @@ class Sonidos:
         # Cargar la musica de fondo
         self.sonido_fondo = pygame.mixer.Sound("assets/soundeffects/soundtrack/soundtrack.mp3")
         self.sonido_fondo.set_volume(0.05)
-        self.sonido_fondo.play(-1) 
+        self.sonido_fondo.play(1) 
 
         # Cargar los efectos de sonido del juego
         #self.sonido_salir = pygame.mixer.Sound()

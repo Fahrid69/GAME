@@ -39,7 +39,7 @@ class Colisiones:
             self.jugador.impulso_salto = -20
 
             # Llamamos al método especifico de muerte por aplastamiento
-            if isinstance(enemigo, (Goomba, Turtle)): 
+            if isinstance(enemigo, (Goomba, Turtle)) and not self.jugador.current_status_temporal == "inmunidad": 
                 enemigo._procesar_muerte_aplastamiento()
                 return
 

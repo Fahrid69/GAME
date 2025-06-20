@@ -5,11 +5,9 @@ from abc import ABC, abstractmethod
 
 
 class Items(ABC, pygame.sprite.Sprite):
-    def __init__(self, nombre, image, dx, dy):
+    def __init__(self, nombre, dx, dy):
         super().__init__()
         self.nombre = nombre
-        self.image = image
-        self.rect = self.image.get_rect(topleft=(dx, dy))
         self.dx = dx
         self.dy = dy
 
@@ -23,31 +21,50 @@ class Items(ABC, pygame.sprite.Sprite):
 
 
 class Moneda(Items):
-    def __init__(self, dx, dy):
+    def __init__(self, dx, dy, jugador):
         super().__init__("Moneda", dx, dy)
 
         """ATRIBUTOS DE LA MONEDA"""
+        # Atributos generales
+        self.jugador = jugador
 
         # Atributos de sprites
-        self.dimension = (32, 32)
+        self.dimension = (50, 50)
         self.sprites = self.cargar_sprites_sheet()
-        self.image = self.sprites["coin"]
-        self.rect = self.image.get_rect(topleft=(dx, dy))
+        self.image = self.sprites["coin"].subsurface((0, 0, 16, 16))
+        self.rect = self.image.get_rect(bottomleft=(dx, dy))
 
         # Atributos de animación
         self.run_frame_index = 0
-        self.run_frame_timer = 0
-        self.run_frame_speed = 100
-        self.run_total_frames = self.sprites["coin"].get_width() // 16  
+        self.run_frame_timer = pygame.time.get_ticks()
+        self.run_frame_speed = 150
+
 
     def update(self):
         self._animar_movimiento()
 
     def _animar_movimiento(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.run_frame_timer > self.run_frame_speed:
+            self.run_frame_index = (self.run_frame_index + 1) % 4
+            self.run_frame_timer = now
+
+
+        ancho, alto = (16, 16)
+            
+        sheet = self.sprites["coin"]
+        frame_rect = pygame.Rect(self.run_frame_index * ancho, 0, ancho, alto)
+        
+        frame = sheet.subsurface(frame_rect)
+        frame = pygame.transform.scale(frame, self.dimension)
+        
+        self.image = frame.convert_alpha()
+
+        print("Papata")
+
 
     def cargar_sprites_sheet(self):
         return {
-            "coin": pygame.image.load("assets/sprites/powers/Moneda/coin.png"),
-            "bigcoin": pygame.image.load("assets/sprites/powers/Moneda/bigcoin.png")
+            "coin": pygame.image.load("assets/sprites/items/Moneda/coin/coin.png"),
+            "bigcoin": pygame.image.load("assets/sprites/items/Moneda/bigcoin/bigcoin.png")
         }

@@ -31,7 +31,7 @@ class Hongo_Rojo(Poder):
         self.direccion = -1
 
         # Atributos de sprites
-        self.dimension = (45, 45)
+        self.dimension = (50,50)
         self.sprites = self.cargar_sprites_sheet()
         self.image = self.sprites["mushroom"].subsurface((0, 0, 18, 18))
         self.image = pygame.transform.scale(self.image, self.dimension)
@@ -43,8 +43,9 @@ class Hongo_Rojo(Poder):
         self.run_frame_speed = 125
         self.run_total_frames = self.sprites["mushroom"].get_width() // 18
 
+
     def update(self):
-        self._moverse()
+        #self._moverse()
         self._actualizar_rect()
         self._animar_movimiento()
 
@@ -71,7 +72,6 @@ class Hongo_Rojo(Poder):
 
     def _actualizar_rect(self):
         self.rect.bottomleft = (self.dx, self.dy)
-
 
     def cargar_sprites_sheet(self):
         return {
@@ -102,7 +102,7 @@ class Hongo_Verde(Poder):
         self.run_total_frames = self.sprites["mushroom"].get_width() // 18
 
     def update(self):
-        self._moverse()
+        #self._moverse()
         self._actualizar_rect()
         self._animar_movimiento()
 

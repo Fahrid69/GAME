@@ -70,15 +70,17 @@ class Jugador(Personaje):
 
 
     def update(self):
-        self._aplicar_gravedad()
-        self._actualizar_rect()
-        self._manejar_controles()
-        self._actualizar_animacion()
-        self._manejar_estados_especiales()
+        if self.current_status_life != "moribundo":
+            self._manejar_controles()
+            self._actualizar_animacion()
+            self._manejar_estados_especiales()
         
         if self.current_status_life == "moribundo":
             self._correr_tiempo_moribundeo()
             self._moribundeo()
+            
+        self._aplicar_gravedad()
+        self._actualizar_rect()
 
 
     def _manejar_controles(self):

@@ -16,8 +16,8 @@ class Game:
         pygame.display.set_caption(f"{TITULO}")
         self.ventana = pygame.display.set_mode((DIMENSION_VENTANA))
         self.clock = pygame.time.Clock()
+        self.time = pygame.time.get_ticks()
         self.running = True
-        self.FPS = 60
 
         # Tipografia
         self.tipografia_fuente = pygame.font.Font("assets/fonts/fuente/PixelDigivolve.ttf", 30)
@@ -38,26 +38,28 @@ class Game:
 
         # Instanciar enemigos
         goomba = Goomba("Goomba", 1200, Y, self.jugador)
-        turtle = Turtle("Turtle", 300, Y, self.jugador)
-        self.enemigos.add(goomba, turtle)
+        turtle = Turtle("Turtle", 1000, Y, self.jugador)
+        self.enemigos.add(goomba)
 
         # Instanciar poderes
-        hongo_rojo = Hongo_Rojo(500, Y)
-        hongo_verde = Hongo_Verde(700, Y)
-        estrella = Estrella(900, Y)
-        self.poderes.add(hongo_rojo, hongo_verde, estrella)
+        hongo_rojo = Hongo_Rojo(1000, Y)
+        hongo_verde = Hongo_Verde(1000, Y)
+        estrella = Estrella(1000, Y)
+        self.poderes.add()
 
         # Instanciar items
-        # Proximamente
+        moneda = Moneda(500, 500, self.jugador)
+        self.items.add(moneda)
 
         # Colisiones
-        self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, None)
+        self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, self.items)
 
         
     def update(self):
         self.jugador.update()
         self.enemigos.update()
         self.poderes.update()
+        self.items.update()
         self.colisiones.detectar_colisiones()
 
     def handle_events(self):
@@ -76,6 +78,7 @@ class Game:
         self._draw_player()
         self._draw_enemies()
         self._draw_powers()
+        self._draw_items()
 
         # Dibujar la pantalla final
         self._game_over()
@@ -100,6 +103,10 @@ class Game:
     def _draw_powers(self):
         for poder in self.poderes:
             self.ventana.blit(poder.image, poder.rect)
+    
+    def _draw_items(self):
+        for item in self.items:
+            self.ventana.blit(item.image, item.rect)
 
     def _game_over(self):
         if self.jugador.vidas < 1:
@@ -124,4 +131,4 @@ class Game:
             self.update()
             self.draw()
             pygame.display.flip()
-            self.clock.tick(self.FPS)
+            self.clock.tick(60)

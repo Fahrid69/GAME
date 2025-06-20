@@ -1,7 +1,5 @@
 import pygame, random
 
-pygame.mixer.init()
-
 ## Se definen las variables que las cuales sus valores no van a modificarse
 
 """ Relacionadas con la ventana del juego """
