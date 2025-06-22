@@ -17,10 +17,10 @@ class GenerarEnemigos:
         self._dificultad_agregada()
 
     def _spawnear(self):
-        now = pygame.time.get_ticks()
         if len(self.enemigos) >= self.spawn_max:
             return
         
+        now = pygame.time.get_ticks()
         if now - self.spawn_end > self.spawn_inter:
             self.spawn_inter = random.randint(999, 9999)
             

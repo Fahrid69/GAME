@@ -8,6 +8,7 @@ from components.player import Jugador
 from components.enemies import Goomba, Turtle
 from components.powers import Hongo_Rojo, Hongo_Verde, Estrella
 from systems.spawner_enemies import GenerarEnemigos
+from systems.spawner_items import GenerarItems
 
 
 class Game:
@@ -47,10 +48,7 @@ class Game:
         self.poderes.add(hongo_rojo, hongo_verde)
 
         # Instanciar items
-        for _ in range(20):
-            x = random.randint(50, ANCHO_VENTANA - 100)
-            moneda = Moneda(x, 400, self.jugador)
-            self.items.add(moneda)
+        self.generar_item = GenerarItems(self.jugador, self.items)
 
         # Colisiones
         self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, self.items)
@@ -62,6 +60,7 @@ class Game:
         self.generar_enemigo.update()
         self.poderes.update()
         self.items.update()
+        self.generar_item.update()
         self.colisiones.detectar_colisiones()
 
     def handle_events(self):
