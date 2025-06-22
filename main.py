@@ -1,19 +1,20 @@
 import pygame
 
 from constants import *
-from components.crash import *
+from systems.crash import *
 from components.debug import *
-from components.Items import Moneda
-from components.Jugador import Jugador
-from components.Enemigo import Goomba, Turtle
-from components.Poderes import Hongo_Rojo, Hongo_Verde, Estrella
+from components.items import Moneda
+from components.player import Jugador
+from components.enemies import Goomba, Turtle
+from components.powers import Hongo_Rojo, Hongo_Verde, Estrella
+from systems.spawner_enemies import GenerarEnemigos
 
 
 class Game:
     def __init__(self):
         # Inicializar Pygame y crear la ventana del juego
         pygame.init()
-        pygame.display.set_caption(f"{TITULO}")
+        pygame.display.set_caption(TITULO)
         self.ventana = pygame.display.set_mode((DIMENSION_VENTANA))
         self.clock = pygame.time.Clock()
         self.time = pygame.time.get_ticks()
@@ -37,19 +38,19 @@ class Game:
         self.jugador = Jugador("Mario Mosquera", 0, Y)
 
         # Instanciar enemigos
-        goomba = Goomba("Goomba", 1200, Y, self.jugador)
-        turtle = Turtle("Turtle", 1000, Y, self.jugador)
-        self.enemigos.add(goomba)
+        self.generar_enemigo = GenerarEnemigos(self.jugador, self.enemigos)
 
         # Instanciar poderes
         hongo_rojo = Hongo_Rojo(1000, Y)
         hongo_verde = Hongo_Verde(1000, Y)
         estrella = Estrella(1000, Y)
-        self.poderes.add()
+        self.poderes.add(hongo_rojo, hongo_verde)
 
         # Instanciar items
-        moneda = Moneda(500, 500, self.jugador)
-        self.items.add(moneda)
+        for _ in range(20):
+            x = random.randint(50, ANCHO_VENTANA - 100)
+            moneda = Moneda(x, 400, self.jugador)
+            self.items.add(moneda)
 
         # Colisiones
         self.colisiones = Colisiones(self.jugador, self.enemigos, self.poderes, self.items)
@@ -58,6 +59,7 @@ class Game:
     def update(self):
         self.jugador.update()
         self.enemigos.update()
+        self.generar_enemigo.update()
         self.poderes.update()
         self.items.update()
         self.colisiones.detectar_colisiones()
@@ -74,16 +76,19 @@ class Game:
         # Dibujar la información del jugador
         self._draw_stats_info()
 
+        self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))
+
         # Dibujar lo demas
-        self._draw_player()
         self._draw_enemies()
         self._draw_powers()
         self._draw_items()
+        self._draw_player()
+
+        #recuadros(self)
 
         # Dibujar la pantalla final
         self._game_over()
 
-        self.ventana.blit(FONDO, (0, ALTO_VENTANA - FONDO.get_height()))
 
     def _draw_stats_info(self):
         texto_vidas = self.tipografia_fuente.render(f"vidas restantes: {self.jugador.vidas}", False, (255, 255, 255))

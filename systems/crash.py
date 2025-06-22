@@ -2,8 +2,8 @@ import pygame
 
 from constants import *
 from soundeffects import Sonidos
-from components.Jugador import Jugador
-from components.Enemigo import Goomba,Turtle
+from components.player import Jugador
+from components.enemies import Goomba,Turtle
 
 class Colisiones:
     def __init__(self, jugador, enemigos, poderes, items):
@@ -79,5 +79,9 @@ class Colisiones:
 
 
     def _jugador_vs_items(self):
-        pass
+        item = pygame.sprite.spritecollideany(self.jugador, self.items)
+
+        if item:
+            self.jugador._incrementar_puntos()
+            self.items.remove(item)
             

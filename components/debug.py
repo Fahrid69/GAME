@@ -12,6 +12,8 @@ def recuadros(self):
         pygame.draw.rect(self.ventana, (255,0,0), enemigo.rect, 1) #REMARCAR LA CAJA DE LOS ENEMIGOS
     for poder in self.poderes:
         pygame.draw.rect(self.ventana, (0,0,255), poder.rect, 1) #REMARCAR AMBAS 
+    for item in self.items:
+        pygame.draw.rect(self.ventana, (0,0,255), item.rect, 1)
 
 def comandos(Self):
     pass

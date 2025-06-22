@@ -1,7 +1,7 @@
-import pygame
+import pygame, random
 
 from constants import *
-from components.Jugador import Jugador
+from components.player import Jugador
 from soundeffects import Sonidos
 from abc import ABC, abstractmethod
 
@@ -120,7 +120,7 @@ class Goomba(Enemigo):
         tiempo = pygame.time.get_ticks() - self.tiempo_desaparicion
         if tiempo > 1000:
             if self.vidas == 0:
-                self.jugador.puntos += 100
+                self.jugador._incrementar_puntos()
                 self.kill()
 
 
@@ -150,9 +150,13 @@ class Turtle(Enemigo):
         # Atributos del enemigo
         self.vidas = 2
         self.current_status = "vivo"
-        self.direccion = "izq"
+        self.direccion = random.choice(["izq", "der"])
         self.velocidad = 2.9
         self.movimiento = 1
+
+        self.descenso = True
+
+        self.jugador = jugador
 
 
         # Atributos de movimiento
@@ -174,20 +178,26 @@ class Turtle(Enemigo):
         self.tiempo_desaparicion = 0
         self.tiempo_revivir = 0
 
-        # Recibimos al jugador
-        self.jugador = jugador
-
 
     def update(self):
+        self._actualizar_rect()
+        self._controlar_aparicion()
+
+
+    def _controlar_aparicion(self):
+        if self.descenso == True:
+            self._animar_aparicion()
+        else:
+            self._controlar_estados()
+
+    def _controlar_estados(self):
         if self.current_status == "vivo":
             self._moverse()
             self._animar()
-            self._actualizar_rect()
         elif self.current_status == "derribado":
             self._revivir()
         else:
             self._correr_tiempo_muerte()
-
 
     
     def _moverse(self):
@@ -200,10 +210,32 @@ class Turtle(Enemigo):
         self.dx += self.movimiento * self.velocidad
 
         # Cambiar la dirección si toca alguno de los limites visibles
-        if self.dx < 0 or  self.dx >= ANCHO_VENTANA  - self.rect.width:
+        if self.dx < 0:
             self.movimiento *= -1
-            self.direccion = "izq" if self.movimiento < 0 else "der"
+            self._tratar_limites()
+            self.direccion = "der"
+        elif self.dx >= ANCHO_VENTANA  - self.rect.width:
+            self.movimiento *= -1
+            self._tratar_limites()
+            self.direccion = "izq"
 
+    def _animar_aparicion(self):
+        if self.descenso == True:
+            self.dy += 10
+            self.image = self.sprites["best turtle"]["shell"]
+            self._tratar_limites()
+            # PIENSO AGREGAR SONIDO LUEGO AQUÍ
+            if self.dy >= Y:
+                self.dy = Y
+                self.descenso = False
+            return True
+        return False
+        
+    def _tratar_limites(self):
+        if self.dx < 0:
+            self.dx = 0
+        elif self.dx > ANCHO_VENTANA - self.rect.width:
+            self.dx = ANCHO_VENTANA - self.rect.width
 
     def _animar(self):
         # Animar el sprite en movimiento.
@@ -241,16 +273,16 @@ class Turtle(Enemigo):
 
     def _revivir(self):
         tiempo = pygame.time.get_ticks() - self.tiempo_revivir
-        if tiempo > 5000:
+        if tiempo > random.randint(999, 9999):
             self.current_status = "vivo"
-            # Agregar efecto de sonido para el revivimiento de la tortuga
+            # RECORDAR AGREGAR EL EFECTO DE SONIDO AQUÍ
 
     def _correr_tiempo_muerte(self):
         tiempo = pygame.time.get_ticks() - self.tiempo_desaparicion
         if tiempo > 1000 and self.current_status == "muerto":
             if self.vidas == 0:
                 # Compensa al jugador con +100 puntos
-                self.jugador.puntos += 100
+                self.jugador._incrementar_puntos()
                 self.kill()
 
 

@@ -5,7 +5,7 @@ class Sonidos:
         # Cargar la musica de fondo
         self.sonido_fondo = pygame.mixer.Sound("assets/soundeffects/soundtrack/soundtrack.mp3")
         self.sonido_fondo.set_volume(0.05)
-        self.sonido_fondo.play(1) 
+        #self.sonido_fondo.play(-1) 
 
         # Cargar los efectos de sonido del juego
         #self.sonido_salir = pygame.mixer.Sound()
@@ -13,6 +13,7 @@ class Sonidos:
         self.sonido_hr = pygame.mixer.Sound("assets/soundeffects/soundpower/hr/red-mushroom.wav")
         self.sonido_hv = pygame.mixer.Sound("assets/soundeffects/soundpower/hv/green-mushroom.mp3")
         self.sonido_inmunidad = pygame.mixer.Sound("assets/soundeffects/soundpower/star/power_inmunity.wav")
+        self.sonido_moneda = pygame.mixer.Sound("assets/soundeffects/soundcoins/get_coin.wav")
         self.sonido_saltar = pygame.mixer.Sound("assets/soundeffects/soundjump/jump.wav")
         self.sonido_goomba = pygame.mixer.Sound("assets/soundeffects/soundamage/goomba/dolor.ogg")
         self.sonido_turtle = pygame.mixer.Sound("assets/soundeffects/soundamage/turtle/dolor.wav")
@@ -27,6 +28,8 @@ class Sonidos:
         self.sonido_hv.play()
     def _reproducir_sonido_inmunidad(self):
         self.sonido_inmunidad.play()
+    def _reproducir_sonido_moneda(self):
+        self.sonido_moneda.play()
     def _reproducir_sonido_salto(self):
         self.sonido_saltar.play()
     def _reproducir_sonido_goomba(self):

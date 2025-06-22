@@ -181,6 +181,10 @@ class Jugador(Personaje):
         if self.current_side == "izq":
             self.image = pygame.transform.flip(self.image, True, False)
 
+    
+    def _incrementar_puntos(self):
+        self.sonidos._reproducir_sonido_moneda()
+        self.puntos += 100
 
     def _manejar_estados_especiales(self):
         # Estados especiales como: "inmune".

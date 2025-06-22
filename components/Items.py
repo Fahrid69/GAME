@@ -36,12 +36,13 @@ class Moneda(Items):
 
         # Atributos de animación
         self.run_frame_index = 0
-        self.run_frame_timer = pygame.time.get_ticks()
-        self.run_frame_speed = 150
+        self.run_frame_timer = 0
+        self.run_frame_speed = 100
 
 
     def update(self):
         self._animar_movimiento()
+        self._actualizar_rect()
 
     def _animar_movimiento(self):
         now = pygame.time.get_ticks()
@@ -58,10 +59,11 @@ class Moneda(Items):
         frame = sheet.subsurface(frame_rect)
         frame = pygame.transform.scale(frame, self.dimension)
         
-        self.image = frame.convert_alpha()
+        self.image = frame
 
-        print("Papata")
 
+    def _actualizar_rect(self):
+        self.rect = self.image.get_rect(bottomleft=(self.dx, self.dy))
 
     def cargar_sprites_sheet(self):
         return {
