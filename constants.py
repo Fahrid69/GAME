@@ -19,7 +19,7 @@ X = random.randint(100,ANCHO_VENTANA - 50)
 Y = 640                               #640
 
 ## IMGS
-FONDO = pygame.transform.scale(pygame.image.load("Assets/fonts/front.png"), (ANCHO_VENTANA, 91))
+FONDO = pygame.transform.scale(pygame.image.load("assets/fonts/fondo/front.png"), (ANCHO_VENTANA, 91))
 
 
 

@@ -9,7 +9,7 @@ class GenerarEnemigos:
         self.enemigos = enemigos
 
         self.spawn_end = pygame.time.get_ticks()
-        self.spawn_inter = 0
+        self.spawn_inter = 3000
         self.spawn_max = 2
 
     def update(self):
@@ -43,12 +43,13 @@ class GenerarEnemigos:
         # YES
         if puntos > 1900:
             self.spawn_max = 3
+            self.spawn_inter = random.randint(999,6999)
         if puntos > 4900:
             self.spawn_max = 5
             self.spawn_inter = random.randint(999,4999)
         if puntos > 9900:
             self.spawn_max = 7
-            self.spawn_inter = 1000
+            self.spawn_inter = random.randint(999,1999)
         if puntos > 14900:
             self.spawn_max = 11
-            self.spawn_inter = 500
+            self.spawn_inter = random.randint(499,999)

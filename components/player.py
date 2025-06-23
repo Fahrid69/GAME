@@ -182,14 +182,14 @@ class Jugador(Personaje):
             self.image = pygame.transform.flip(self.image, True, False)
 
     
-    def _incrementar_puntos(self):
-        self.sonidos._reproducir_sonido_moneda()
-        self.puntos += 100
-
     def _manejar_estados_especiales(self):
         # Estados especiales como: "inmune".
         if self.current_status_temporal == "inmunidad":
             self._desactivar_inmunidad()
+
+    def _incrementar_puntos(self, cantidad=100):
+        self.sonidos._reproducir_sonido_moneda()
+        self.puntos += cantidad
 
     def _incrementar_vida(self):
         self.vidas += 1
@@ -219,21 +219,33 @@ class Jugador(Personaje):
             self.current_status_temporal = "ninguno"
             self.velocidad = 5
 
+    def _recibir_golpe(self):
+        if self.estado_tamano == "gigante":
+            self._desactivar_gigante()
+        else:
+            self._procesar_muerte()
+
     def _procesar_muerte(self):
         self.current_status_life = "moribundo"
         self.tiempo_moribundo = pygame.time.get_ticks()
-        if self.vidas > 1:
-            self.sonidos._reproducir_sonido_moribundo()
 
+        # NO RESTAR LA VIDA AQUÍ
         if self.vidas == 1:
             self.is_dead = True
             self.current_status_life = "muerto"
             self.sonidos._reproducir_sonido_gameover()
+            print(f"Puntos total: {self.puntos}")
+
+        else:
+            self.sonidos._reproducir_sonido_moribundo()
 
     def _correr_tiempo_moribundeo(self):
         tiempo = pygame.time.get_ticks() - self.tiempo_moribundo
         if tiempo > 2000:
-            self.vidas -= 1
+            if self.current_status_size == "gigante":
+                self._desactivar_gigante()
+            else:
+                self.vidas -= 1
             self.current_status_life = "vivo"
             self.impulso_salto = 0
             self.is_grounded = False

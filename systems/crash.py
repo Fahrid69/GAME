@@ -38,25 +38,35 @@ class Colisiones:
         if self.jugador.rect.bottom >= enemigo.rect.top + 10 and self.jugador.is_jumping:
             self.jugador.impulso_salto = -20
 
-            # Llamamos al método especifico de muerte por aplastamiento
-            if isinstance(enemigo, (Goomba, Turtle)) and not self.jugador.current_status_temporal == "inmunidad": 
+            if isinstance(enemigo, (Goomba, Turtle)) and not self.jugador.current_status_temporal == "inmunidad":
+                if isinstance(enemigo, Turtle) and enemigo.descenso:
+                    self.jugador._procesar_muerte()
+                    return  # esta descendiendo
                 enemigo._procesar_muerte_aplastamiento()
                 return
 
+        # Si el enemigo <<Turtle>> cae encima del jugador
+        if self.jugador.rect.top <= enemigo.rect.bottom + 10 and self.jugador.is_jumping:
+            self.jugador._procesar_muerte()
+            print("empanada")
+
+            
         # Si verificar colisión lateral o frontal
         if pygame.sprite.collide_rect(self.jugador, enemigo):
-            # Primero verificar si el jugador está en estado de inmunidad (tiene prioridad)
+            # Primero verificar si el jugador está en estado de inmunidad (ps tiene prioridad)
             if self.jugador.current_status_temporal == "inmunidad":
                 enemigo.kill() 
+                self.jugador._incrementar_puntos(200)
                 return  # se devuelve
             
-            # Si no es inmune, verificar si está en estado gigante
-            if self.jugador.current_status_size == "gigante":
-                self.jugador._desactivar_gigante()  # Reduce de tamaño sin perder vida
-                return
-                        
+            # Si colisiona y nada mas le queda una vida termina inmediatamente
+            if self.jugador.vidas == 1:
+                self.jugador.is_dead = True
+
             # Si no es inmune ni gigante, procesa daño normal
-            self.jugador._procesar_muerte()                        
+            self.jugador._procesar_muerte()    
+
+
 
 
     def _jugador_vs_poderes(self):

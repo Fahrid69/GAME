@@ -8,6 +8,7 @@ from components.player import Jugador
 from components.enemies import Goomba, Turtle
 from components.powers import Hongo_Rojo, Hongo_Verde, Estrella
 from systems.spawner_enemies import GenerarEnemigos
+from systems.spawner_powers import GenerarPoderes
 from systems.spawner_items import GenerarItems
 
 
@@ -42,10 +43,7 @@ class Game:
         self.generar_enemigo = GenerarEnemigos(self.jugador, self.enemigos)
 
         # Instanciar poderes
-        hongo_rojo = Hongo_Rojo(1000, Y)
-        hongo_verde = Hongo_Verde(1000, Y)
-        estrella = Estrella(1000, Y)
-        self.poderes.add(hongo_rojo, hongo_verde)
+        self.generar_poder = GenerarPoderes(self.jugador, self.poderes)
 
         # Instanciar items
         self.generar_item = GenerarItems(self.jugador, self.items)
@@ -59,6 +57,7 @@ class Game:
         self.enemigos.update()
         self.generar_enemigo.update()
         self.poderes.update()
+        self.generar_poder.update()
         self.items.update()
         self.generar_item.update()
         self.colisiones.detectar_colisiones()
@@ -86,7 +85,7 @@ class Game:
         #recuadros(self)
 
         # Dibujar la pantalla final
-        self._game_over()
+        self._vistar_game_over()
 
 
     def _draw_stats_info(self):
@@ -112,11 +111,12 @@ class Game:
         for item in self.items:
             self.ventana.blit(item.image, item.rect)
 
-    def _game_over(self):
-        if self.jugador.vidas < 1:
-            texto = self.tipografia_fuente.render(f"GAME - OVER", True, (255, 0, 0))
-            rect_texto = texto.get_rect(center=(ANCHO_VENTANA//2, ALTO_VENTANA//2))
-            self.ventana.blit(texto, rect_texto)
+    def _vistar_game_over(self):
+        if self.jugador.is_dead:
+            self.ventana.fill((0,0,0))
+
+            self.heart = pygame.transform.scale(pygame.image.load("assets/fonts/pixels/heart-broken.png"), (50,50))
+            self.ventana.blit(self.heart, (ANCHO_VENTANA//2, ALTO_VENTANA//2))
 
             # remover todos los sprites de enemigos y poderes
             self.jugador.kill()
