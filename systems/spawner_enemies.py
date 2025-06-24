@@ -53,3 +53,6 @@ class GenerarEnemigos:
         if puntos > 14900:
             self.spawn_max = 11
             self.spawn_inter = random.randint(499,999)
+        if puntos > 18900:
+            self.spawn_max = 13
+            self.spawn_inter = 100
