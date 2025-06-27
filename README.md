@@ -1,11 +1,12 @@
 # PROYECTO FINAL: SUPER MARIO MOSQUERA BIT
-## ¿Que es?
+## Descripción general
 "Super Mario Mosquera Bit" es un juego creado por estudiantes de la Universidad del Valle, con el proposito de poner en practica los conceptos aprendidos en la clase de fundamentación de la programación orientada a objetos.
 ##
 ![guia-py](https://github.com/user-attachments/assets/f8c92ae5-6770-4f45-8829-d1bf9511c2b3)
 ## Guia de instalación:
 Para experimentar del juego tiene que hacer lo siguiente:
-### 1. Asegurate de tener instalado python3, si aún no lo tienes puedes seguir este primer paso (Si ya lo tienes instalado saltalo):
+### 1. Instala Python3
+Asegurate de tener instalado python3, si aún no lo tienes puedes seguir este primer paso (Si ya lo tienes instalado saltalo):
 [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
 > Asegúrate de marcar la opción **"Add Python to PATH"** durante la instalación.
