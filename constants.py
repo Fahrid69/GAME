@@ -15,7 +15,6 @@ ALTO_VENTANA = 720
 TITULO = ">_game_SuperMarioBros_3.py"
 
 # con esta modifica el suelo real del juego a los objetos
-X = random.randint(100,ANCHO_VENTANA - 50)
 Y = 640                               #640
 
 ## IMGS

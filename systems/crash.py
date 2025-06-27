@@ -48,9 +48,7 @@ class Colisiones:
         # Si el enemigo <<Turtle>> cae encima del jugador
         if self.jugador.rect.top <= enemigo.rect.bottom + 10 and self.jugador.is_jumping:
             self.jugador._procesar_muerte()
-            print("empanada")
 
-            
         # Si verificar colisión lateral o frontal
         if pygame.sprite.collide_rect(self.jugador, enemigo):
             # Primero verificar si el jugador está en estado de inmunidad (ps tiene prioridad)

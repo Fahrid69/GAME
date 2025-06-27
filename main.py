@@ -123,9 +123,6 @@ class Game:
             self.enemigos.empty()
             self.poderes.empty()
             
-            
-
-
         """DEPURACION"""
         #recuadros(self)
 

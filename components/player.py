@@ -70,6 +70,11 @@ class Jugador(Personaje):
 
 
     def update(self):
+        self._aplicar_gravedad()
+        self._manejar_estados()
+        self._actualizar_rect()
+
+    def _manejar_estados(self):
         if self.current_status_life != "moribundo":
             self._manejar_controles()
             self._actualizar_animacion()
@@ -78,10 +83,6 @@ class Jugador(Personaje):
         if self.current_status_life == "moribundo":
             self._correr_tiempo_moribundeo()
             self._moribundeo()
-            
-        self._aplicar_gravedad()
-        self._actualizar_rect()
-
 
     def _manejar_controles(self):
         keys = pygame.key.get_pressed()
