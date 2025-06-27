@@ -1,4 +1,4 @@
-# PROYECTO FINAL: SUPER MARIO MOSQUERA BIT
+# PROYECTO FINAL: SUPER MARIO IN BIT
 ## Descripción general
 "Super Mario Mosquera Bit" es un juego creado por estudiantes de la Universidad del Valle, con el proposito de poner en practica los conceptos aprendidos en la clase de fundamentación de la programación orientada a objetos.
 ##
