@@ -11,7 +11,7 @@ Para experimentar del juego tiene que hacer lo siguiente:
 > Asegúrate de marcar la opción **"Add Python to PATH"** durante la instalación.
 
 Para más información sobre la intalación puede seguir paso a paso el siguiente video:  
-[Cómo instalar Python en Windows (YouTube)](https://www.youtube.com/watch?v=Kf9Kx6pKs64)
+[Cómo instalar Python en Windows (YouTube)](https://youtu.be/i6j8jT_OdEU?si=GNKT86YLOpCK7CC2)
 ---
 
 ### 2. Instala Pygame
